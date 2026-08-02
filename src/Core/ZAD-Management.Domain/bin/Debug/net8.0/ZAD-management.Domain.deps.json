@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "ZAD-Management.Domain/1.0.0": {
+        "runtime": {
+          "ZAD-Management.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ZAD-Management.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -1,0 +1,15 @@
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\bin\Debug\net10.0\ZAD-management.Application.deps.json
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\bin\Debug\net10.0\ZAD-management.Application.dll
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\bin\Debug\net10.0\ZAD-management.Application.pdb
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\bin\Debug\net10.0\ZAD-management.Domain.dll
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\bin\Debug\net10.0\ZAD-management.Domain.pdb
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\ZAD-management.Application.csproj.AssemblyReference.cache
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\ZAD-management.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\ZAD-management.Application.AssemblyInfoInputs.cache
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\ZAD-management.Application.AssemblyInfo.cs
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\ZAD-management.Application.csproj.CoreCompileInputs.cache
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\ZAD-mana.63F66D1A.Up2Date
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\ZAD-management.Application.dll
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\refint\ZAD-management.Application.dll
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\ZAD-management.Application.pdb
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net10.0\ref\ZAD-management.Application.dll

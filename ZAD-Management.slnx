@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Core/" />
+  <Folder Name="/src/Core/ZAD-Management.Application/">
+    <Project Path="src/Core/ZAD-Management.Application/ZAD-management.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Core/ZAD-Management.Domain/">
+    <Project Path="src/Core/ZAD-Management.Domain/ZAD-management.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="src/Infrastructure/ZAD-Management.Infrastructure/ZAD-Management.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Presentation/">
+    <Project Path="src/Presentation/ZAD-Management.API/ZAD-Management.API.csproj" />
+  </Folder>
+</Solution>

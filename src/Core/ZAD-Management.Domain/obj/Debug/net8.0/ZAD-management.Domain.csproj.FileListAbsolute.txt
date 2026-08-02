@@ -1,0 +1,11 @@
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\bin\Debug\net8.0\ZAD-management.Domain.deps.json
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\bin\Debug\net8.0\ZAD-management.Domain.dll
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\bin\Debug\net8.0\ZAD-management.Domain.pdb
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ZAD-management.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ZAD-management.Domain.AssemblyInfoInputs.cache
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ZAD-management.Domain.AssemblyInfo.cs
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ZAD-management.Domain.csproj.CoreCompileInputs.cache
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ZAD-management.Domain.dll
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\refint\ZAD-management.Domain.dll
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ZAD-management.Domain.pdb
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ref\ZAD-management.Domain.dll

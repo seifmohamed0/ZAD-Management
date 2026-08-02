@@ -1,0 +1,29 @@
+Companies
+│
+├── Create
+│    POST    /api/settings/companies
+│
+├── Read All
+│    GET     /api/settings/companies
+│
+├── Read By Id
+│    GET     /api/settings/companies/{id}
+│
+├── Update
+│    PUT     /api/settings/companies/{id}
+│
+└── Delete (Soft)
+     DELETE  /api/settings/companies/{id}
+
+     dotnet run --project src/Presentation/ZAD-Management.API
+
+{
+  "companyId": 1,
+  "code": "BR001",
+  "arabicName": "الفرع الرئيسي",
+  "englishName": "Main Branch",
+  "arabicAddress": "القاهرة",
+  "englishAddress": "Cairo",
+  "phone": "01012345678",
+  "logo": "logo.png"
+}
