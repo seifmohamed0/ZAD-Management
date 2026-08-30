@@ -1,0 +1,238 @@
+.page-container {
+  min-height: calc(100vh - 52px);
+  background-color: #f7faf9;
+  display: flex;
+  flex-direction: column;
+
+  .sub-nav {
+    height: 46px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+
+    .sub-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      .zad-badge {
+        font-weight: 900;
+        font-size: 1.15rem;
+        color: #105952;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        a {
+          font-size: 0.84rem;
+          color: #4a5568;
+          text-decoration: none;
+          font-weight: 500;
+          transition: color 0.2s;
+
+          &:hover, &.active {
+            color: #105952;
+            font-weight: 700;
+          }
+        }
+      }
+    }
+
+    .sub-nav-right {
+      .nav-icon-btn {
+        width: 28px;
+        height: 28px;
+        background: #ffffff;
+        border: 1px solid #cbd5e0;
+        border-radius: 4px;
+        color: #4a5568;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .content-wrapper {
+    padding: 24px;
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
+
+    .header-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      .breadcrumb-area {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .back-link {
+          font-size: 1.4rem;
+          color: #105952;
+          text-decoration: none;
+          font-weight: bold;
+          margin-right: 4px;
+        }
+
+        .breadcrumb-parent {
+          font-size: 0.95rem;
+          color: #105952;
+          font-weight: 600;
+        }
+
+        .breadcrumb-sep {
+          color: #a0aec0;
+        }
+
+        .breadcrumb-current {
+          font-size: 0.95rem;
+          color: #718096;
+        }
+      }
+
+      .search-box {
+        position: relative;
+        width: 280px;
+
+        input {
+          width: 100%;
+          padding: 8px 36px 8px 12px;
+          border: 1px solid #e2e8f0;
+          border-radius: 6px;
+          font-size: 0.88rem;
+          outline: none;
+
+          &:focus {
+            border-color: #105952;
+            box-shadow: 0 0 0 2px rgba(16, 89, 82, 0.1);
+          }
+        }
+
+        svg {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          pointer-events: none;
+        }
+      }
+    }
+
+    .toolbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+
+      .export-tools {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .tool-btn {
+          width: 32px;
+          height: 32px;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: #4a5568;
+
+          &:hover {
+            background-color: #f7fafc;
+          }
+        }
+      }
+    }
+
+    .company-logo-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #105952, #20a090);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .name-cell {
+      display: flex;
+      flex-direction: column;
+
+      .en-name {
+        font-weight: 600;
+        color: #2d3748;
+      }
+      .ar-name {
+        font-size: 0.78rem;
+        color: #718096;
+      }
+    }
+
+    .link-open {
+      color: #105952;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .action-btn {
+        background: transparent;
+        border: none;
+        padding: 4px;
+        color: #718096;
+        cursor: pointer;
+        border-radius: 4px;
+
+        &:hover {
+          color: #105952;
+          background: #edf2f7;
+        }
+
+        &.delete:hover {
+          color: #e53e3e;
+        }
+      }
+    }
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+
+    .full-width {
+      grid-column: span 2;
+    }
+  }
+}
+

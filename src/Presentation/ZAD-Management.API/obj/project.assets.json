@@ -1678,30 +1678,30 @@
           }
         }
       },
-      "ZAD-management.Application/1.0.0": {
+      "ZAD-Management.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "FluentValidation.DependencyInjectionExtensions": "12.1.1",
           "MediatR": "12.4.1",
-          "ZAD-management.Domain": "1.0.0"
+          "ZAD-Management.Domain": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/ZAD-management.Application.dll": {}
+          "bin/placeholder/ZAD-Management.Application.dll": {}
         },
         "runtime": {
-          "bin/placeholder/ZAD-management.Application.dll": {}
+          "bin/placeholder/ZAD-Management.Application.dll": {}
         }
       },
-      "ZAD-management.Domain/1.0.0": {
+      "ZAD-Management.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "compile": {
-          "bin/placeholder/ZAD-management.Domain.dll": {}
+          "bin/placeholder/ZAD-Management.Domain.dll": {}
         },
         "runtime": {
-          "bin/placeholder/ZAD-management.Domain.dll": {}
+          "bin/placeholder/ZAD-Management.Domain.dll": {}
         }
       },
       "ZAD-Management.Infrastructure/1.0.0": {
@@ -1710,8 +1710,8 @@
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "8.0.13",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.13",
-          "ZAD-management.Application": "1.0.0",
-          "ZAD-management.Domain": "1.0.0"
+          "ZAD-Management.Application": "1.0.0",
+          "ZAD-Management.Domain": "1.0.0"
         },
         "compile": {
           "bin/placeholder/ZAD-Management.Infrastructure.dll": {}
@@ -4650,15 +4650,15 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "ZAD-management.Application/1.0.0": {
+    "ZAD-Management.Application/1.0.0": {
       "type": "project",
-      "path": "../../Core/ZAD-Management.Application/ZAD-management.Application.csproj",
-      "msbuildProject": "../../Core/ZAD-Management.Application/ZAD-management.Application.csproj"
+      "path": "../../Core/ZAD-Management.Application/ZAD-Management.Application.csproj",
+      "msbuildProject": "../../Core/ZAD-Management.Application/ZAD-Management.Application.csproj"
     },
-    "ZAD-management.Domain/1.0.0": {
+    "ZAD-Management.Domain/1.0.0": {
       "type": "project",
-      "path": "../../Core/ZAD-Management.Domain/ZAD-management.Domain.csproj",
-      "msbuildProject": "../../Core/ZAD-Management.Domain/ZAD-management.Domain.csproj"
+      "path": "../../Core/ZAD-Management.Domain/ZAD-Management.Domain.csproj",
+      "msbuildProject": "../../Core/ZAD-Management.Domain/ZAD-Management.Domain.csproj"
     },
     "ZAD-Management.Infrastructure/1.0.0": {
       "type": "project",
@@ -4671,8 +4671,8 @@
       "Microsoft.AspNetCore.OpenApi >= 8.0.13",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.13",
       "Swashbuckle.AspNetCore >= 6.6.2",
-      "ZAD-Management.Infrastructure >= 1.0.0",
-      "ZAD-management.Application >= 1.0.0"
+      "ZAD-Management.Application >= 1.0.0",
+      "ZAD-Management.Infrastructure >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -4707,8 +4707,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj": {
-              "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj"
+            "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj": {
+              "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj"
             },
             "C:\\Projects\\ZAD-Management\\src\\Infrastructure\\ZAD-Management.Infrastructure\\ZAD-Management.Infrastructure.csproj": {
               "projectPath": "C:\\Projects\\ZAD-Management\\src\\Infrastructure\\ZAD-Management.Infrastructure\\ZAD-Management.Infrastructure.csproj"

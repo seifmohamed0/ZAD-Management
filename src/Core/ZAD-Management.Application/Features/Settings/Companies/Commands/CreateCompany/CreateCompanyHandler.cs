@@ -20,17 +20,17 @@ public class CreateCompanyHandler
     {
         var company = new Company
         {
-            Code = request.Company.Code,
-            ArabicName = request.Company.ArabicName,
-            EnglishName = request.Company.EnglishName,
-            ArabicAddress = request.Company.ArabicAddress,
-            EnglishAddress = request.Company.EnglishAddress,
-            Country = request.Company.Country,
-            City = request.Company.City,
-            Language = request.Company.Language,
-            Phone = request.Company.Phone,
-            Website = request.Company.Website,
-            Logo = request.Company.Logo
+            Code = request.Company.Code ?? string.Empty,
+            ArabicName = request.Company.ArabicName ?? string.Empty,
+            EnglishName = request.Company.EnglishName ?? string.Empty,
+            ArabicAddress = request.Company.ArabicAddress ?? string.Empty,
+            EnglishAddress = request.Company.EnglishAddress ?? string.Empty,
+            Country = string.IsNullOrWhiteSpace(request.Company.Country) ? "Saudi Arabia" : request.Company.Country,
+            City = string.IsNullOrWhiteSpace(request.Company.City) ? "Riyadh" : request.Company.City,
+            Language = string.IsNullOrWhiteSpace(request.Company.Language) ? "ar" : request.Company.Language,
+            Phone = request.Company.Phone ?? string.Empty,
+            Website = request.Company.Website ?? string.Empty,
+            Logo = request.Company.Logo ?? string.Empty
         };
 
         return await _companyRepository.AddAsync(company);

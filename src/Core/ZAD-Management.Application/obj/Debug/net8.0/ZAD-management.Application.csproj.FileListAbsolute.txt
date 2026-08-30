@@ -12,4 +12,5 @@ C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net8.0\
 C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net8.0\refint\ZAD-management.Application.dll
 C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net8.0\ZAD-management.Application.pdb
 C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net8.0\ref\ZAD-management.Application.dll
-C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net8.0\ZAD-mana.63F66D1A.Up2Date
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net8.0\ZAD-management.Application.sourcelink.json
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Application\obj\Debug\net8.0\ZAD-Mana.B6166562.Up2Date

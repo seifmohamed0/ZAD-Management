@@ -152,6 +152,76 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                     b.ToTable("Companies", (string)null);
                 });
 
+            modelBuilder.Entity("ZAD_Management.Domain.Entities.RentalContract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AccountingNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContractNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ContractType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("DriverName")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("PaymentType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReferenceNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("WithDriver")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("RentalContracts", (string)null);
+                });
+
             modelBuilder.Entity("ZAD_Management.Domain.Entities.Branch", b =>
                 {
                     b.HasOne("ZAD_Management.Domain.Entities.Company", "Company")
@@ -161,6 +231,435 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("ZAD_Management.Domain.Entities.RentalContract", b =>
+                {
+                    b.HasOne("ZAD_Management.Domain.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ZAD_Management.Domain.Entities.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.ContractPeriod", "Period", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("ActualPeriodInDays")
+                                .HasColumnType("int")
+                                .HasColumnName("ActualPeriodInDays");
+
+                            b1.Property<string>("DeliveryDay")
+                                .IsRequired()
+                                .HasMaxLength(20)
+                                .HasColumnType("nvarchar(20)")
+                                .HasColumnName("DeliveryDay");
+
+                            b1.Property<DateTime>("ExpectedReceivingDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("ExpectedReceivingDate");
+
+                            b1.Property<TimeSpan>("ExpectedReceivingTime")
+                                .HasColumnType("time")
+                                .HasColumnName("ExpectedReceivingTime");
+
+                            b1.Property<int>("PeriodInDays")
+                                .HasColumnType("int")
+                                .HasColumnName("PeriodInDays");
+
+                            b1.Property<DateTime>("StartDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("StartDate");
+
+                            b1.Property<string>("StartDay")
+                                .IsRequired()
+                                .HasMaxLength(20)
+                                .HasColumnType("nvarchar(20)")
+                                .HasColumnName("StartDay");
+
+                            b1.Property<TimeSpan>("StartTime")
+                                .HasColumnType("time")
+                                .HasColumnName("StartTime");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.DriverSnapshot", "SecondDriver", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("IdExpireDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("SecondDriverIdExpireDate");
+
+                            b1.Property<string>("IdNumber")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("SecondDriverIdNumber");
+
+                            b1.Property<DateTime?>("LicenseExpireDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("SecondDriverLicenseExpireDate");
+
+                            b1.Property<string>("LicenseNumber")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("SecondDriverLicenseNumber");
+
+                            b1.Property<string>("Nationality")
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("SecondDriverNationality");
+
+                            b1.Property<string>("SecondDriverName")
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("SecondDriverName");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.MaintenanceAlert", "Maintenance", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("NextMaintenanceDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("NextMaintenanceDate");
+
+                            b1.Property<decimal?>("NextMaintenanceKm")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("NextMaintenanceKm");
+
+                            b1.Property<int>("NotificationType")
+                                .HasColumnType("int")
+                                .HasColumnName("NotificationType");
+
+                            b1.Property<int>("ReminderBeforePeriodicMaintenance")
+                                .HasColumnType("int")
+                                .HasColumnName("ReminderBeforePeriodicMaintenance");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.MileagePolicy", "Mileage", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal>("AmountOfKmExceedingLimit")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("AmountOfKmExceedingLimit");
+
+                            b1.Property<decimal>("KilometerPerDay")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("KilometerPerDay");
+
+                            b1.Property<decimal>("MaximumKilometerPerDay")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("MaximumKilometerPerDay");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.PenaltyPolicy", "Penalties", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal>("AccidentPenalty")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("AccidentPenalty");
+
+                            b1.Property<decimal>("AllowedDelayHours")
+                                .HasPrecision(5, 2)
+                                .HasColumnType("decimal(5,2)")
+                                .HasColumnName("AllowedDelayHours");
+
+                            b1.Property<decimal>("DelayPenaltyPerHour")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("DelayPenaltyPerHour");
+
+                            b1.Property<decimal>("MaintenancePenalty")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("MaintenancePenalty");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.PrivateDriverTerms", "DriverTerms", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal>("DailyRate")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("DriverDailyRate");
+
+                            b1.Property<decimal>("DriverFare")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("DriverFare");
+
+                            b1.Property<decimal>("DriverOvertimeAmountPerHour")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("DriverOvertimeAmountPerHour");
+
+                            b1.Property<decimal>("DriverWorkingHoursPerDay")
+                                .HasPrecision(5, 2)
+                                .HasColumnType("decimal(5,2)")
+                                .HasColumnName("DriverWorkingHoursPerDay");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.RentalPricing", "Pricing", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal>("DiscountAmount")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("DiscountAmount");
+
+                            b1.Property<decimal>("DiscountPercent")
+                                .HasPrecision(5, 2)
+                                .HasColumnType("decimal(5,2)")
+                                .HasColumnName("DiscountPercent");
+
+                            b1.Property<decimal>("NetRentPrice")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("NetRentPrice");
+
+                            b1.Property<decimal>("RentPrice")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("RentPrice");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.RentedVehicleSnapshot", "Vehicle", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("FileNo")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("VehicleFileNo");
+
+                            b1.Property<string>("ModelYear")
+                                .IsRequired()
+                                .HasMaxLength(10)
+                                .HasColumnType("nvarchar(10)")
+                                .HasColumnName("VehicleModelYear");
+
+                            b1.Property<string>("PlateNo")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("VehiclePlateNo");
+
+                            b1.Property<decimal?>("ReturnKilometerCounter")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("ReturnKilometerCounter");
+
+                            b1.Property<decimal>("StartKilometerCounter")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("StartKilometerCounter");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.SponsorSnapshot", "Sponsor", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime?>("IdExpireDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("SponsorIdExpireDate");
+
+                            b1.Property<string>("IdNumber")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("SponsorIdNumber");
+
+                            b1.Property<DateTime?>("LicenseExpireDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("SponsorLicenseExpireDate");
+
+                            b1.Property<string>("LicenseNumber")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("SponsorLicenseNumber");
+
+                            b1.Property<string>("Nationality")
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("SponsorNationality");
+
+                            b1.Property<string>("SponsorName")
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("SponsorName");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.TenantSnapshot", "Tenant", b1 =>
+                        {
+                            b1.Property<int>("RentalContractId")
+                                .HasColumnType("int");
+
+                            b1.Property<int?>("Age")
+                                .HasColumnType("int")
+                                .HasColumnName("TenantAge");
+
+                            b1.Property<string>("IdNumber")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("TenantIdNumber");
+
+                            b1.Property<string>("LicenseNumber")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("TenantLicenseNumber");
+
+                            b1.Property<string>("Mobile")
+                                .IsRequired()
+                                .HasMaxLength(25)
+                                .HasColumnType("nvarchar(25)")
+                                .HasColumnName("TenantMobile");
+
+                            b1.Property<string>("PassportNumber")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("TenantPassportNumber");
+
+                            b1.Property<DateTime?>("TenantBirthday")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("TenantBirthday");
+
+                            b1.Property<string>("TenantName")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("TenantName");
+
+                            b1.Property<string>("UnifiedNumber")
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("TenantUnifiedNumber");
+
+                            b1.HasKey("RentalContractId");
+
+                            b1.ToTable("RentalContracts");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RentalContractId");
+                        });
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("DriverTerms");
+
+                    b.Navigation("Maintenance");
+
+                    b.Navigation("Mileage")
+                        .IsRequired();
+
+                    b.Navigation("Penalties")
+                        .IsRequired();
+
+                    b.Navigation("Period")
+                        .IsRequired();
+
+                    b.Navigation("Pricing")
+                        .IsRequired();
+
+                    b.Navigation("SecondDriver");
+
+                    b.Navigation("Sponsor");
+
+                    b.Navigation("Tenant")
+                        .IsRequired();
+
+                    b.Navigation("Vehicle")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ZAD_Management.Domain.Entities.Company", b =>

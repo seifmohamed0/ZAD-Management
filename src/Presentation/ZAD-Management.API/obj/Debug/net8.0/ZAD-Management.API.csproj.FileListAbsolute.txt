@@ -157,3 +157,4 @@ C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.pdb
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.genruntimeconfig.cache
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ref\ZAD-Management.API.dll
+C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.sourcelink.json

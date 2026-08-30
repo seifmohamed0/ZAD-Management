@@ -34,13 +34,13 @@ public class CreateBranchHandler
         var branch = new Branch
         {
             CompanyId = request.Branch.CompanyId,
-            Code = request.Branch.Code,
-            ArabicName = request.Branch.ArabicName,
-            EnglishName = request.Branch.EnglishName,
-            ArabicAddress = request.Branch.ArabicAddress,
-            EnglishAddress = request.Branch.EnglishAddress,
-            Phone = request.Branch.Phone,
-            Logo = request.Branch.Logo
+            Code = request.Branch.Code ?? string.Empty,
+            ArabicName = request.Branch.ArabicName ?? string.Empty,
+            EnglishName = request.Branch.EnglishName ?? string.Empty,
+            ArabicAddress = request.Branch.ArabicAddress ?? string.Empty,
+            EnglishAddress = request.Branch.EnglishAddress ?? string.Empty,
+            Phone = request.Branch.Phone ?? string.Empty,
+            Logo = request.Branch.Logo ?? string.Empty
         };
 
         return await _branchRepository.AddAsync(branch);

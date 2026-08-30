@@ -26,17 +26,17 @@ public class UpdateCompanyHandler
             return false;
 
 
-        company.Code = request.Company.Code;
-        company.ArabicName = request.Company.ArabicName;
-        company.EnglishName = request.Company.EnglishName;
-        company.ArabicAddress = request.Company.ArabicAddress;
-        company.EnglishAddress = request.Company.EnglishAddress;
-        company.Country = request.Company.Country;
-        company.City = request.Company.City;
-        company.Language = request.Company.Language;
-        company.Phone = request.Company.Phone;
-        company.Website = request.Company.Website;
-        company.Logo = request.Company.Logo;
+        company.Code = request.Company.Code ?? company.Code;
+        company.ArabicName = request.Company.ArabicName ?? company.ArabicName;
+        company.EnglishName = request.Company.EnglishName ?? company.EnglishName;
+        company.ArabicAddress = request.Company.ArabicAddress ?? string.Empty;
+        company.EnglishAddress = request.Company.EnglishAddress ?? string.Empty;
+        company.Country = string.IsNullOrWhiteSpace(request.Company.Country) ? company.Country : request.Company.Country;
+        company.City = string.IsNullOrWhiteSpace(request.Company.City) ? company.City : request.Company.City;
+        company.Language = string.IsNullOrWhiteSpace(request.Company.Language) ? company.Language : request.Company.Language;
+        company.Phone = request.Company.Phone ?? string.Empty;
+        company.Website = request.Company.Website ?? string.Empty;
+        company.Logo = request.Company.Logo ?? string.Empty;
         company.IsActive = request.Company.IsActive;
         company.UpdatedAt = DateTime.UtcNow;
 

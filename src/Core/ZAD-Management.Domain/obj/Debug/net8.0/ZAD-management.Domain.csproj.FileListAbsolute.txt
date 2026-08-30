@@ -9,3 +9,4 @@ C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ZAD-m
 C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\refint\ZAD-management.Domain.dll
 C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ZAD-management.Domain.pdb
 C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ref\ZAD-management.Domain.dll
+C:\Projects\ZAD-Management\src\Core\ZAD-Management.Domain\obj\Debug\net8.0\ZAD-management.Domain.sourcelink.json

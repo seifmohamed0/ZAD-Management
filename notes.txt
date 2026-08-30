@@ -1,0 +1,54 @@
+Companies
+│
+├── Create
+│    POST    /api/settings/companies
+│
+├── Read All
+│    GET     /api/settings/companies
+│
+├── Read By Id
+│    GET     /api/settings/companies/{id}
+│
+├── Update
+│    PUT     /api/settings/companies/{id}
+│
+└── Delete (Soft)
+     DELETE  /api/settings/companies/{id}
+
+Branches
+│
+├── Create
+│    POST    /api/settings/branches
+│
+├── Read All
+│    GET     /api/settings/branches
+│
+├── Read By Id
+│    GET     /api/settings/branches/{id}
+│
+├── Update
+│    PUT     /api/settings/branches/{id}
+│
+└── Delete (Soft)
+     DELETE  /api/settings/branches/{id}
+
+Rental Contracts
+│
+├── Create
+│    POST    /api/rentals/contracts
+│
+├── Read All
+│    GET     /api/rentals/contracts
+│    GET     /api/rentals/contracts?branchId=1
+│
+└── Read By Id
+     GET     /api/rentals/contracts/{id}
+
+How to Run:
+1. Backend .NET API:
+   dotnet run --project src/Presentation/ZAD-Management.API
+
+2. Frontend Angular Web App:
+   cd zad-management-web
+   npm start
+   (Opens at: http://localhost:4200)

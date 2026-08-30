@@ -14,6 +14,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Branch> Branches => Set<Branch>();
 
+    public DbSet<RentalContract> RentalContracts => Set<RentalContract>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

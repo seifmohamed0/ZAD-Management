@@ -17,3 +17,4 @@ C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\obj\
 C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\obj\Debug\net8.0\ZAD-Management.Infrastructure.pdb
 C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\obj\Debug\net8.0\ZAD-Management.Infrastructure.genruntimeconfig.cache
 C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\obj\Debug\net8.0\ref\ZAD-Management.Infrastructure.dll
+C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\obj\Debug\net8.0\ZAD-Management.Infrastructure.sourcelink.json

@@ -1,0 +1,80 @@
+<header class="top-navbar">
+  <div class="navbar-left">
+    <!-- Brand / Logo -->
+    <a class="brand" (click)="goToHome()" style="cursor: pointer;">
+      <div class="brand-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span>LOGO</span>
+      </div>
+      <span class="brand-sub">empresa</span>
+    </a>
+
+    <!-- Company Selector -->
+    <div class="selector-box">
+      <select [ngModel]="state.selectedCompanyId()" (ngModelChange)="onCompanyChange($event)" class="nav-select">
+        <option [ngValue]="null" disabled>Select Company</option>
+        @for (comp of state.companies(); track comp.id) {
+          <option [value]="comp.id">{{ comp.englishName || comp.arabicName }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Branch Selector -->
+    <div class="selector-box">
+      <select [ngModel]="state.selectedBranchId()" (ngModelChange)="onBranchChange($event)" class="nav-select">
+        <option [ngValue]="null" disabled>Select Branch</option>
+        @for (br of state.filteredBranches(); track br.id) {
+          <option [value]="br.id">{{ br.englishName || br.arabicName }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="navbar-right">
+    <!-- Notification Bell -->
+    <button class="nav-btn" title="Notifications">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+      </svg>
+      <span class="badge-dot"></span>
+    </button>
+
+    <!-- Language Globe -->
+    <button class="nav-btn" title="Language">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+      </svg>
+      <span class="lang-arrow">▾</span>
+    </button>
+
+    <!-- User Profile -->
+    <div class="user-profile">
+      <div class="avatar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+      <span class="user-name">Admin</span>
+      <span class="user-arrow">▾</span>
+    </div>
+
+    <!-- App Launcher Grid Button -->
+    <button class="launcher-btn" (click)="goToHome()" title="All Apps Launcher">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+    </button>
+  </div>
+</header>
+

@@ -1,0 +1,159 @@
+.home-container {
+  min-height: calc(100vh - 52px);
+  background: linear-gradient(135deg, #e3f2f0 0%, #cceae6 50%, #bce3de 100%);
+  display: flex;
+  flex-direction: column;
+
+  .sub-header {
+    height: 48px;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+
+    .sub-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .zad-logo {
+        font-weight: 900;
+        font-size: 1.3rem;
+        color: #105952;
+        letter-spacing: 1px;
+      }
+
+      .app-title-badge {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #718096;
+        padding-left: 12px;
+        border-left: 1px solid #e2e8f0;
+      }
+    }
+
+    .sub-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .sub-icon-btn {
+        width: 30px;
+        height: 30px;
+        border: 1px solid #e2e8f0;
+        background: #ffffff;
+        border-radius: 4px;
+        color: #4a5568;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: 700;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: #edf2f7;
+          color: #105952;
+        }
+
+        &.active {
+          background-color: #105952;
+          color: #ffffff;
+          border-color: #105952;
+        }
+      }
+    }
+  }
+
+  .launcher-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+
+    .launcher-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      max-width: 900px;
+      width: 100%;
+
+      @media (max-width: 850px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      @media (max-width: 600px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .app-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border-radius: 20px;
+        padding: 24px 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(16, 89, 82, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+
+        &.clickable {
+          cursor: pointer;
+
+          &:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 30px rgba(16, 89, 82, 0.16);
+            background-color: #ffffff;
+            border-color: #105952;
+
+            .app-title {
+              color: #105952;
+            }
+          }
+        }
+
+        .icon-wrapper {
+          margin-bottom: 12px;
+
+          .icon-box {
+            width: 68px;
+            height: 68px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+          }
+        }
+
+        .app-title {
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: #2d3748;
+          text-align: center;
+          transition: color 0.2s;
+        }
+
+        .app-badge {
+          position: absolute;
+          top: 10px;
+          right: 12px;
+          background-color: #c6f6d5;
+          color: #22543d;
+          font-size: 0.65rem;
+          font-weight: 700;
+          padding: 2px 6px;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+}
+

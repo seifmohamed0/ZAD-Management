@@ -36,13 +36,13 @@ public class UpdateBranchHandler
             return false;
 
         branch.CompanyId = request.Branch.CompanyId;
-        branch.Code = request.Branch.Code;
-        branch.ArabicName = request.Branch.ArabicName;
-        branch.EnglishName = request.Branch.EnglishName;
-        branch.ArabicAddress = request.Branch.ArabicAddress;
-        branch.EnglishAddress = request.Branch.EnglishAddress;
-        branch.Phone = request.Branch.Phone;
-        branch.Logo = request.Branch.Logo;
+        branch.Code = request.Branch.Code ?? branch.Code;
+        branch.ArabicName = request.Branch.ArabicName ?? branch.ArabicName;
+        branch.EnglishName = request.Branch.EnglishName ?? branch.EnglishName;
+        branch.ArabicAddress = request.Branch.ArabicAddress ?? string.Empty;
+        branch.EnglishAddress = request.Branch.EnglishAddress ?? string.Empty;
+        branch.Phone = request.Branch.Phone ?? string.Empty;
+        branch.Logo = request.Branch.Logo ?? string.Empty;
         branch.IsActive = request.Branch.IsActive;
         branch.UpdatedAt = DateTime.UtcNow;
 
