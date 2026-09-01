@@ -11,7 +11,6 @@ public class ContractPeriod
     public int PeriodInDays { get; private set; }
     public int ActualPeriodInDays { get; private set; }
 
-    // EF Core parameterless constructor
     private ContractPeriod() { }
 
     public ContractPeriod(

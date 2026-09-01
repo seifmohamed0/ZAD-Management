@@ -4,12 +4,12 @@
     "C:\\Projects\\ZAD-Management\\src\\Infrastructure\\ZAD-Management.Infrastructure\\ZAD-Management.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj": {
+    "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj",
-        "projectName": "ZAD-Management.Application",
-        "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj",
+        "projectUniqueName": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj",
+        "projectName": "ZAD-management.Application",
+        "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj",
         "packagesPath": "C:\\Users\\morni\\.nuget\\packages\\",
         "outputPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\obj\\",
         "projectStyle": "PackageReference",
@@ -32,8 +32,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj": {
-                "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj"
+              "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj": {
+                "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj"
               }
             }
           }
@@ -101,12 +101,12 @@
         }
       }
     },
-    "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj": {
+    "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj",
-        "projectName": "ZAD-Management.Domain",
-        "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj",
+        "projectUniqueName": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj",
+        "projectName": "ZAD-management.Domain",
+        "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj",
         "packagesPath": "C:\\Users\\morni\\.nuget\\packages\\",
         "outputPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\obj\\",
         "projectStyle": "PackageReference",
@@ -208,11 +208,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj": {
-                "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj"
+              "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj": {
+                "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj"
               },
-              "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj": {
-                "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj"
+              "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj": {
+                "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj"
               }
             }
           }

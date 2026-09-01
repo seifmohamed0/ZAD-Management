@@ -1,0 +1,598 @@
+<div class="page-container">
+  <!-- Sub-nav Header -->
+  <div class="sub-nav">
+    <div class="sub-nav-left">
+      <div class="zad-badge">ZAD</div>
+      <div class="nav-links">
+        <a routerLink="/rentals/contracts">Dashboard</a>
+        <a routerLink="/rentals/contracts" class="active">Rental ▾</a>
+        <a routerLink="/rentals/contracts">Insurance and Maintenance ▾</a>
+        <a routerLink="/rentals/contracts">Issues ▾</a>
+        <a routerLink="/rentals/contracts">Reports ▾</a>
+        <a routerLink="/rentals/contracts">Configuration ▾</a>
+      </div>
+    </div>
+    <div class="sub-nav-right">
+      <button class="nav-icon-btn">+</button>
+      <button class="nav-icon-btn">&lt;</button>
+      <button class="nav-icon-btn">&gt;</button>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <!-- Breadcrumb & Save Action Row -->
+    <div class="header-action-row">
+      <div class="breadcrumb-area">
+        <a routerLink="/rentals/contracts" class="back-link">‹</a>
+        <span class="breadcrumb-parent">Vehicle Rental</span>
+        <span class="breadcrumb-sep">/</span>
+        <a routerLink="/rentals/contracts" class="breadcrumb-parent">Contracts</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Add Contract</span>
+      </div>
+
+      <div class="action-tools">
+        <button class="save-icon-btn" (click)="saveContract()" [disabled]="isSubmitting()" title="Save Contract">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+        </button>
+        <button class="exit-icon-btn" (click)="cancel()" title="Cancel & Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Alert Messages -->
+    @if (errorMessage()) {
+      <div class="alert alert-danger">{{ errorMessage() }}</div>
+    }
+    @if (successMessage()) {
+      <div class="alert alert-success">{{ successMessage() }}</div>
+    }
+
+    <form [formGroup]="form">
+      <!-- Section 1: Contract Settings Card (Matching Image 2) -->
+      <fieldset class="section-card">
+        <legend class="section-legend">Contract Settings</legend>
+
+        <div class="settings-grid">
+          <!-- Row 1 -->
+          <div class="form-group">
+            <label>Contract Branch *</label>
+            <select formControlName="branchId" class="form-select">
+              <option [ngValue]="null" disabled>Select one</option>
+              @for (b of state.branches(); track b.id) {
+                <option [value]="b.id">{{ b.englishName || b.arabicName }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Time</label>
+            <input type="time" formControlName="time" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label>Date *</label>
+            <input type="date" formControlName="date" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label>Day</label>
+            <input type="text" formControlName="day" class="form-control" readonly />
+          </div>
+
+          <!-- Row 2 -->
+          <div class="form-group">
+            <label>Accounting No.</label>
+            <input type="text" formControlName="accountingNo" class="form-control" readonly />
+          </div>
+
+          <div class="form-group">
+            <label>Reference No.</label>
+            <input type="text" formControlName="referenceNo" class="form-control" placeholder="Optional" />
+          </div>
+
+          <div class="form-group">
+            <label>Currency *</label>
+            <select formControlName="currency" class="form-select">
+              <option value="SAR">SAR</option>
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Status</label>
+            <input type="text" formControlName="status" class="form-control status-new" readonly />
+          </div>
+
+          <!-- Row 3 -->
+          <div class="form-group">
+            <label>Contract Type *</label>
+            <select formControlName="contractType" class="form-select">
+              <option [value]="ContractType.Daily">Daily</option>
+              <option [value]="ContractType.Weekly">Weekly</option>
+              <option [value]="ContractType.Monthly">Monthly</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Payment Type *</label>
+            <select formControlName="paymentType" class="form-select">
+              <option [value]="PaymentType.Cash">Cash</option>
+              <option [value]="PaymentType.CreditCard">Credit Card</option>
+              <option [value]="PaymentType.BankTransfer">Bank Transfer</option>
+              <option [value]="PaymentType.Deferred">Deferred</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Period In Days *</label>
+            <input type="number" formControlName="periodInDays" class="form-control" min="1" />
+          </div>
+
+          <div class="form-group">
+            <label>Actual Period In Days</label>
+            <input type="number" formControlName="actualPeriodInDays" class="form-control" readonly />
+          </div>
+
+          <!-- Row 4 -->
+          <div class="form-group">
+            <label>Expected Receiving Time</label>
+            <input type="time" formControlName="expectedReceivingTime" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label>Expected Receiving Date *</label>
+            <input type="date" formControlName="expectedReceivingDate" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label>Delivery Day</label>
+            <input type="text" formControlName="deliveryDay" class="form-control" readonly />
+          </div>
+
+          <div class="form-group">
+            <label>With Driver</label>
+            <select formControlName="withDriver" class="form-select">
+              <option [value]="false">No</option>
+              <option [value]="true">Yes</option>
+            </select>
+          </div>
+
+          <!-- Row 5 -->
+          <div class="form-group">
+            <label>Driver Name</label>
+            <input type="text" formControlName="driverName" class="form-control" placeholder="Select one from the drivers" />
+          </div>
+
+          <div class="form-group span-3">
+            <label>Note 'Reference'</label>
+            <input type="text" formControlName="notes" class="form-control" placeholder="Add contract notes..." />
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Section 2: Tabs Header (Matching Image 1 & 2) -->
+      <div class="tabs-nav-bar">
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="activeTab() === 'tenant'"
+          (click)="setTab('tenant')"
+        >
+          Tenant
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="activeTab() === 'vehicle'"
+          (click)="setTab('vehicle')"
+        >
+          Vehicle info
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="activeTab() === 'diagram'"
+          (click)="setTab('diagram')"
+        >
+          Vehicle Diagram
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="activeTab() === 'documents'"
+          (click)="setTab('documents')"
+        >
+          Documents
+        </button>
+      </div>
+
+      <!-- TAB 1: TENANT CONTENT (Matching Image 1 & 3) -->
+      @if (activeTab() === 'tenant') {
+        <div class="tab-content">
+          <!-- Vehicle Tenant Card -->
+          <fieldset class="section-card" formGroupName="tenant">
+            <legend class="section-legend">Vehicle Tenant</legend>
+            <div class="tenant-grid">
+              <div class="form-group with-add">
+                <label>Tenant Name *</label>
+                <div class="input-with-btn">
+                  <input type="text" formControlName="tenantName" class="form-control" placeholder="Tenant Full Name" />
+                  <button type="button" class="btn-add-plus" title="Add New Tenant">+</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>License number *</label>
+                <input type="text" formControlName="licenseNumber" class="form-control" placeholder="e.g. LIC-998822" />
+              </div>
+
+              <div class="form-group">
+                <label>Passport Number</label>
+                <input type="text" formControlName="passportNumber" class="form-control" placeholder="Optional" />
+              </div>
+
+              <div class="form-group">
+                <label>Unified number</label>
+                <input type="text" formControlName="unifiedNumber" class="form-control" placeholder="Optional" />
+              </div>
+
+              <div class="form-group">
+                <label>ID Number *</label>
+                <input type="text" formControlName="idNumber" class="form-control" placeholder="e.g. 1088776655" />
+              </div>
+
+              <div class="form-group">
+                <label>Mobile *</label>
+                <input type="text" formControlName="mobile" class="form-control" placeholder="e.g. 0501234567" />
+              </div>
+
+              <div class="form-group">
+                <label>Tenant Birthday</label>
+                <input type="date" formControlName="tenantBirthday" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Age</label>
+                <input type="text" formControlName="tenantAge" class="form-control" readonly placeholder="Years" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Sponsor Card (Matching Image 3) -->
+          <fieldset class="section-card" formGroupName="sponsor">
+            <legend class="section-legend">Sponsor</legend>
+            <div class="sponsor-grid">
+              <div class="form-group with-add">
+                <label>Sponsor name</label>
+                <div class="input-with-btn">
+                  <input type="text" formControlName="sponsorName" class="form-control" placeholder="Select one or type" />
+                  <button type="button" class="btn-add-plus">+</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Nationality</label>
+                <select formControlName="nationality" class="form-select">
+                  <option value="Saudi">Saudi Arabia</option>
+                  <option value="Egyptian">Egypt</option>
+                  <option value="Emirati">UAE</option>
+                  <option value="Jordanian">Jordan</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>License number</label>
+                <input type="text" formControlName="licenseNumber" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>License expire date</label>
+                <input type="date" formControlName="licenseExpireDate" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>ID Number</label>
+                <input type="text" formControlName="idNumber" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>ID expire date</label>
+                <input type="date" formControlName="idExpireDate" class="form-control" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Second Driver Card (Matching Image 3) -->
+          <fieldset class="section-card" formGroupName="secondDriver">
+            <legend class="section-legend">Second Driver</legend>
+            <div class="sponsor-grid">
+              <div class="form-group with-add">
+                <label>Second Driver name</label>
+                <div class="input-with-btn">
+                  <input type="text" formControlName="secondDriverName" class="form-control" placeholder="Select one or type" />
+                  <button type="button" class="btn-add-plus">+</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Nationality</label>
+                <select formControlName="nationality" class="form-select">
+                  <option value="Saudi">Saudi Arabia</option>
+                  <option value="Egyptian">Egypt</option>
+                  <option value="Emirati">UAE</option>
+                  <option value="Jordanian">Jordan</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>License number</label>
+                <input type="text" formControlName="licenseNumber" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>License expire date</label>
+                <input type="date" formControlName="licenseExpireDate" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>ID Number</label>
+                <input type="text" formControlName="idNumber" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>ID expire date</label>
+                <input type="date" formControlName="idExpireDate" class="form-control" />
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      }
+
+      <!-- TAB 2: VEHICLE INFO CONTENT (Matching Image 1 & 2 in latest prompt) -->
+      @if (activeTab() === 'vehicle') {
+        <div class="tab-content">
+          <!-- Vehicle Info Card -->
+          <fieldset class="section-card" formGroupName="vehicle">
+            <legend class="section-legend">Vehicle info</legend>
+            <div class="four-grid">
+              <div class="form-group">
+                <label>Plate No. *</label>
+                <input type="text" formControlName="plateNo" class="form-control" placeholder="e.g. ABC 1234" />
+              </div>
+
+              <div class="form-group">
+                <label>Model year</label>
+                <input type="text" formControlName="modelYear" class="form-control" placeholder="2024" />
+              </div>
+
+              <div class="form-group">
+                <label>File No.</label>
+                <input type="text" formControlName="fileNo" class="form-control" placeholder="FILE-441" />
+              </div>
+
+              <div class="form-group">
+                <label>Kilometer counter *</label>
+                <input type="number" formControlName="startKilometerCounter" class="form-control" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Rent Price Card -->
+          <fieldset class="section-card" formGroupName="pricing">
+            <legend class="section-legend">Rent Price</legend>
+            <div class="four-grid">
+              <div class="form-group">
+                <label>Rent Price *</label>
+                <input type="number" formControlName="rentPrice" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Discount %</label>
+                <input type="number" formControlName="discountPercent" class="form-control" placeholder="%0.00" />
+              </div>
+
+              <div class="form-group">
+                <label>Discount amount</label>
+                <input type="number" formControlName="discountAmount" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Net Rent Price</label>
+                <input type="number" formControlName="netRentPrice" class="form-control net-price-input" readonly />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Penalties Card -->
+          <fieldset class="section-card" formGroupName="penalties">
+            <legend class="section-legend">Penalties</legend>
+            <div class="four-grid">
+              <div class="form-group">
+                <label>Delay penalty/Amount Per Hour</label>
+                <input type="number" formControlName="delayPenaltyPerHour" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Allowed Delay Hours</label>
+                <input type="number" formControlName="allowedDelayHours" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Maintenance penalty</label>
+                <input type="number" formControlName="maintenancePenalty" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Accident penalty</label>
+                <input type="number" formControlName="accidentPenalty" class="form-control" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Private Driver Card -->
+          <fieldset class="section-card" formGroupName="driverTerms">
+            <legend class="section-legend">Private Driver</legend>
+            <div class="four-grid">
+              <div class="form-group">
+                <label>Driver Fare</label>
+                <input type="number" formControlName="driverFare" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Driver working Hours Per day</label>
+                <input type="number" formControlName="driverWorkingHoursPerDay" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Driver overtime amount per hour</label>
+                <input type="number" formControlName="driverOvertimeAmountPerHour" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Daily Rate</label>
+                <input type="number" formControlName="dailyRate" class="form-control" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Kilometer Per Day Card -->
+          <fieldset class="section-card" formGroupName="mileage">
+            <legend class="section-legend">Kilometer Per Day</legend>
+            <div class="three-grid">
+              <div class="form-group">
+                <label>Kilometer Per Day</label>
+                <input type="number" formControlName="kilometerPerDay" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Maximum Kilometer Per Day</label>
+                <input type="number" formControlName="maximumKilometerPerDay" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Amount of KM Exceeding the Limit</label>
+                <input type="number" formControlName="amountOfKmExceedingLimit" class="form-control" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Next Maintenance Card -->
+          <fieldset class="section-card" formGroupName="maintenance">
+            <legend class="section-legend">Next Maintenance</legend>
+            <div class="four-grid">
+              <div class="form-group">
+                <label>Next Maintenance Date</label>
+                <input type="date" formControlName="nextMaintenanceDate" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Next Maintenance KM</label>
+                <input type="number" formControlName="nextMaintenanceKm" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Reminder Before-Periodic Maintenance</label>
+                <input type="number" formControlName="reminderBeforePeriodicMaintenance" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Notification type</label>
+                <select formControlName="notificationType" class="form-select">
+                  <option [value]="NotificationType.Kilometer">Kilometer</option>
+                  <option [value]="NotificationType.Date">Date</option>
+                  <option [value]="NotificationType.Both">Both</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      }
+
+      <!-- TAB 3: VEHICLE DIAGRAM CONTENT -->
+      @if (activeTab() === 'diagram') {
+        <div class="tab-content">
+          <fieldset class="section-card">
+            <legend class="section-legend">Vehicle Inspection & Diagram</legend>
+            <div class="diagram-container">
+              <div class="diagram-info">
+                <p>Click on the inspection points to mark any pre-existing dents or scratches prior to vehicle handover:</p>
+                <div class="points-grid">
+                  @for (p of diagramPoints; track p.id) {
+                    <label class="point-checkbox" [class.checked]="p.checked">
+                      <input type="checkbox" [checked]="p.checked" (change)="toggleDiagramPoint(p)" />
+                      <span>{{ p.label }}</span>
+                      @if (p.checked) {
+                        <span class="dent-badge">Damage / Dent</span>
+                      } @else {
+                        <span class="ok-badge">OK</span>
+                      }
+                    </label>
+                  }
+                </div>
+              </div>
+              <div class="car-diagram-box">
+                <div class="diagram-car-art">
+                  🚗
+                  <span>Interactive Car Diagram Checkpoint</span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      }
+
+      <!-- TAB 4: DOCUMENTS CONTENT -->
+      @if (activeTab() === 'documents') {
+        <div class="tab-content">
+          <fieldset class="section-card">
+            <legend class="section-legend">Contract Documents & Attachments</legend>
+            <div class="docs-grid">
+              <div class="doc-upload-box">
+                <div class="doc-icon">📄</div>
+                <h4>Tenant ID / Passport</h4>
+                <p>Upload a clear copy of the national ID or Passport</p>
+                <button type="button" class="btn btn-outline">Select File</button>
+              </div>
+              <div class="doc-upload-box">
+                <div class="doc-icon">🪪</div>
+                <h4>Driver License</h4>
+                <p>Upload front and back of driver license</p>
+                <button type="button" class="btn btn-outline">Select File</button>
+              </div>
+              <div class="doc-upload-box">
+                <div class="doc-icon">✍️</div>
+                <h4>Signed Paper Copy</h4>
+                <p>Upload signed physical contract copy</p>
+                <button type="button" class="btn btn-outline">Select File</button>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      }
+
+      <!-- Bottom Save Action Bar -->
+      <div class="bottom-bar">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="saveContract()" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            <span>Saving...</span>
+          } @else {
+            <span>Save & Create Contract</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

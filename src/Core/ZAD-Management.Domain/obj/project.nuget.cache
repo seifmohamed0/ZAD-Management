@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qtxTGxtm/bs=",
+  "dgSpecHash": "yvi7iQFDPpI=",
   "success": true,
-  "projectFilePath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj",
+  "projectFilePath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\morni\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.24\\microsoft.netcore.app.ref.8.0.24.nupkg.sha512",
     "C:\\Users\\morni\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.24\\microsoft.windowsdesktop.app.ref.8.0.24.nupkg.sha512",
