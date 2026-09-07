@@ -19,7 +19,7 @@ export class AddContractComponent implements OnInit {
   public state = inject(StateService);
   private router = inject(Router);
 
-  activeTab = signal<'tenant' | 'vehicle' | 'diagram' | 'documents'>('tenant');
+  activeTab = signal<'tenant' | 'vehicle'>('tenant');
   isSubmitting = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
@@ -32,16 +32,77 @@ export class AddContractComponent implements OnInit {
   PaymentType = PaymentType;
   NotificationType = NotificationType;
 
-  // Car Diagram Checkpoints
-  diagramPoints = [
-    { id: 'f-bumper', label: 'Front Bumper', checked: false },
-    { id: 'r-bumper', label: 'Rear Bumper', checked: false },
-    { id: 'l-door', label: 'Left Doors', checked: false },
-    { id: 'r-door', label: 'Right Doors', checked: false },
-    { id: 'hood', label: 'Hood / Engine', checked: false },
-    { id: 'windshield', label: 'Windshield Glass', checked: false },
-    { id: 'tires', label: 'Tires & Rims', checked: false },
-    { id: 'interior', label: 'Interior Seats & Dash', checked: false }
+  dummyTenants = [
+    {
+      name: 'سيف الدين',
+      license: 'LIC-998822',
+      idNumber: '1088776655',
+      mobile: '01012345678'
+    },
+    {
+      name: 'أحمد محمد',
+      license: 'LIC-334455',
+      idNumber: '1044556677',
+      mobile: '01098765432'
+    },
+    {
+      name: 'محمد احمد',
+      license: 'LIC-771122',
+      idNumber: '1033221100',
+      mobile: '01099887766'
+    }
+  ];
+
+  dummyDrivers = [
+    {
+      name: 'احمد وائل',
+      nationality: 'Egyptian',
+      license: 'LIC-554433',
+      idNumber: '1077665544'
+    },
+    {
+      name: 'عمر خالد',
+      nationality: 'Egyptian',
+      license: 'LIC-112233',
+      idNumber: '2011223344'
+    },
+    {
+      name: 'سعيد سعد',
+      nationality: 'Egyptian',
+      license: 'LIC-889900',
+      idNumber: '7841990123'
+    }
+  ];
+
+  dummyVehicles = [
+    {
+      label: 'تويوتا كامري 2024 (سيدان)',
+      plateNo: 'أ ب ج 1234',
+      modelYear: '2024',
+      km: 24500,
+      rentPrice: 250
+    },
+    {
+      label: 'هيونداي إلنترا 2023 (اقتصادي)',
+      plateNo: 'س ص ع 5678',
+      modelYear: '2023',
+      km: 38000,
+      rentPrice: 180
+    },
+    {
+      label: 'مرسيدس E200 2025 (فخمة)',
+      plateNo: 'د هـ و 9999',
+      modelYear: '2025',
+      km: 5200,
+      rentPrice: 600
+    },
+    {
+      label: 'كيا سبورتاج 2024 (SUV)',
+      plateNo: 'ر ز ط 3344',
+      modelYear: '2024',
+      km: 19000,
+      rentPrice: 320
+    }
   ];
 
   ngOnInit(): void {
@@ -53,11 +114,10 @@ export class AddContractComponent implements OnInit {
     const threeDaysLater = new Date(today);
     threeDaysLater.setDate(today.getDate() + 3);
 
-    const defaultBranchId = this.state.selectedBranchId() || null;
-    const defaultCompanyId = this.state.selectedCompanyId() || null;
+    const defaultBranchId = this.state.selectedBranchId() || (this.state.branches()[0]?.id ?? null);
+    const defaultCompanyId = this.state.selectedCompanyId() || (this.state.companies()[0]?.id ?? null);
 
     this.form = this.fb.group({
-      // Settings Header
       companyId: [defaultCompanyId, Validators.required],
       branchId: [defaultBranchId, Validators.required],
       time: ['09:00'],
@@ -66,7 +126,7 @@ export class AddContractComponent implements OnInit {
       accountingNo: ['ACC-' + Math.floor(1000 + Math.random() * 9000)],
       referenceNo: ['REF-' + Math.floor(1000 + Math.random() * 9000)],
       currency: ['SAR', Validators.required],
-      status: ['New'],
+      status: ['Active'],
       contractType: [ContractType.Daily, Validators.required],
       paymentType: [PaymentType.Cash, Validators.required],
       periodInDays: [3, [Validators.required, Validators.min(1)]],
@@ -78,7 +138,7 @@ export class AddContractComponent implements OnInit {
       driverName: [''],
       notes: [''],
 
-      // Tab 1: Tenant
+      // Tenant
       tenant: this.fb.group({
         tenantName: ['', Validators.required],
         licenseNumber: ['', Validators.required],
@@ -90,8 +150,8 @@ export class AddContractComponent implements OnInit {
         tenantAge: ['']
       }),
 
-      sponsor: this.fb.group({
-        sponsorName: [''],
+      driver: this.fb.group({
+        driverName: [''],
         nationality: ['Saudi'],
         licenseNumber: [''],
         licenseExpireDate: [''],
@@ -99,16 +159,6 @@ export class AddContractComponent implements OnInit {
         idExpireDate: ['']
       }),
 
-      secondDriver: this.fb.group({
-        secondDriverName: [''],
-        nationality: ['Saudi'],
-        licenseNumber: [''],
-        licenseExpireDate: [''],
-        idNumber: [''],
-        idExpireDate: ['']
-      }),
-
-      // Tab 2: Vehicle Info
       vehicle: this.fb.group({
         plateNo: ['', Validators.required],
         modelYear: ['2024'],
@@ -128,26 +178,6 @@ export class AddContractComponent implements OnInit {
         allowedDelayHours: [2],
         maintenancePenalty: [150],
         accidentPenalty: [500]
-      }),
-
-      driverTerms: this.fb.group({
-        driverFare: [100],
-        driverWorkingHoursPerDay: [8],
-        driverOvertimeAmountPerHour: [25],
-        dailyRate: [120]
-      }),
-
-      mileage: this.fb.group({
-        kilometerPerDay: [200],
-        maximumKilometerPerDay: [350],
-        amountOfKmExceedingLimit: [1.5]
-      }),
-
-      maintenance: this.fb.group({
-        nextMaintenanceDate: ['2026-10-01'],
-        nextMaintenanceKm: [20000],
-        reminderBeforePeriodicMaintenance: [7],
-        notificationType: [NotificationType.Kilometer]
       })
     });
 
@@ -155,25 +185,9 @@ export class AddContractComponent implements OnInit {
   }
 
   setupLiveCalculations(): void {
-    // 1. Calculate Expected Date when Start Date or Period changes
-    this.form.get('date')?.valueChanges.subscribe(d => this.updateDateCalculations());
-    this.form.get('periodInDays')?.valueChanges.subscribe(p => this.updateDateCalculations());
+    this.form.get('date')?.valueChanges.subscribe(() => this.updateDateCalculations());
+    this.form.get('periodInDays')?.valueChanges.subscribe(() => this.updateDateCalculations());
 
-    // 2. Birthday -> Age calculation
-    this.form.get('tenant.tenantBirthday')?.valueChanges.subscribe(bday => {
-      if (bday) {
-        const birthDate = new Date(bday);
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-        this.form.get('tenant.tenantAge')?.setValue(age > 0 ? `${age} Years` : '0');
-      } else {
-        this.form.get('tenant.tenantAge')?.setValue('');
-      }
-    });
-
-    // 3. Pricing & Discount Calculations
     this.form.get('pricing.rentPrice')?.valueChanges.subscribe(() => this.recalculatePricing(true));
     this.form.get('pricing.discountPercent')?.valueChanges.subscribe(() => this.recalculatePricing(true));
     this.form.get('pricing.discountAmount')?.valueChanges.subscribe(() => this.recalculatePricing(false));
@@ -212,16 +226,59 @@ export class AddContractComponent implements OnInit {
     }
   }
 
+  selectDummyTenant(index: any): void {
+    const t = this.dummyTenants[Number(index)];
+    if (!t) return;
+    this.form.get('tenant')?.patchValue({
+      tenantName: t.name,
+      licenseNumber: t.license,
+      idNumber: t.idNumber,
+      mobile: t.mobile
+    });
+  }
+
+  selectDummyDriver(index: any): void {
+    const d = this.dummyDrivers[Number(index)];
+    if (!d) return;
+    this.form.get('driver')?.patchValue({
+      driverName: d.name,
+      nationality: d.nationality,
+      licenseNumber: d.license,
+      idNumber: d.idNumber
+    });
+    this.form.patchValue({ withDriver: true, driverName: d.name });
+  }
+
+  selectDummyVehicle(index: any): void {
+    const v = this.dummyVehicles[Number(index)];
+    if (!v) return;
+    this.form.get('vehicle')?.patchValue({
+      plateNo: v.plateNo,
+      modelYear: v.modelYear,
+      startKilometerCounter: v.km
+    });
+    this.form.get('pricing')?.patchValue({
+      rentPrice: v.rentPrice,
+      discountPercent: 0,
+      discountAmount: 0,
+      netRentPrice: v.rentPrice
+    });
+  }
+
+  quickFillAll(): void {
+    this.selectDummyTenant(0);
+    this.selectDummyDriver(0);
+    this.selectDummyVehicle(0);
+    this.successMessage.set('Filled form with sample data! You can adjust dates or save.');
+    setTimeout(() => this.successMessage.set(null), 3000);
+  }
+
   formatDate(d: Date): string {
     return d.toISOString().split('T')[0];
   }
 
-  setTab(tab: 'tenant' | 'vehicle' | 'diagram' | 'documents'): void {
+  setTab(tab: 'tenant' | 'vehicle'): void {
     this.activeTab.set(tab);
-  }
-
-  toggleDiagramPoint(point: any): void {
-    point.checked = !point.checked;
   }
 
   saveContract(): void {
@@ -230,7 +287,7 @@ export class AddContractComponent implements OnInit {
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.errorMessage.set('Please fill in all required fields (Tenant, Vehicle, Dates, Branch).');
+      this.errorMessage.set('Please fill in required fields (Tenant name, license, ID, mobile, and vehicle plate).');
       return;
     }
 
@@ -238,15 +295,15 @@ export class AddContractComponent implements OnInit {
     const val = this.form.getRawValue();
 
     const dto: CreateRentalContractDto = {
-      companyId: val.companyId || this.state.selectedCompanyId() || 1,
-      branchId: val.branchId || this.state.selectedBranchId() || 1,
+      companyId: Number(val.companyId) || this.state.selectedCompanyId() || 1,
+      branchId: Number(val.branchId) || this.state.selectedBranchId() || 1,
       referenceNo: val.referenceNo,
       accountingNo: val.accountingNo,
       currency: val.currency || 'SAR',
       contractType: Number(val.contractType),
       paymentType: Number(val.paymentType),
       withDriver: val.withDriver === true || val.withDriver === 'true',
-      driverName: val.driverName,
+      driverName: val.driver?.driverName || val.driverName,
       notes: val.notes,
 
       startDate: new Date(`${val.date}T${val.time}:00Z`).toISOString(),
@@ -265,22 +322,13 @@ export class AddContractComponent implements OnInit {
         tenantBirthday: val.tenant.tenantBirthday ? new Date(val.tenant.tenantBirthday).toISOString() : undefined
       },
 
-      sponsor: val.sponsor?.sponsorName ? {
-        sponsorName: val.sponsor.sponsorName,
-        nationality: val.sponsor.nationality,
-        licenseNumber: val.sponsor.licenseNumber,
-        licenseExpireDate: val.sponsor.licenseExpireDate ? new Date(val.sponsor.licenseExpireDate).toISOString() : undefined,
-        idNumber: val.sponsor.idNumber,
-        idExpireDate: val.sponsor.idExpireDate ? new Date(val.sponsor.idExpireDate).toISOString() : undefined
-      } : undefined,
-
-      secondDriver: val.secondDriver?.secondDriverName ? {
-        secondDriverName: val.secondDriver.secondDriverName,
-        nationality: val.secondDriver.nationality,
-        licenseNumber: val.secondDriver.licenseNumber,
-        licenseExpireDate: val.secondDriver.licenseExpireDate ? new Date(val.secondDriver.licenseExpireDate).toISOString() : undefined,
-        idNumber: val.secondDriver.idNumber,
-        idExpireDate: val.secondDriver.idExpireDate ? new Date(val.secondDriver.idExpireDate).toISOString() : undefined
+      secondDriver: val.driver?.driverName ? {
+        secondDriverName: val.driver.driverName,
+        nationality: val.driver.nationality,
+        licenseNumber: val.driver.licenseNumber,
+        licenseExpireDate: val.driver.licenseExpireDate ? new Date(val.driver.licenseExpireDate).toISOString() : undefined,
+        idNumber: val.driver.idNumber,
+        idExpireDate: val.driver.idExpireDate ? new Date(val.driver.idExpireDate).toISOString() : undefined
       } : undefined,
 
       vehicle: {
@@ -301,36 +349,16 @@ export class AddContractComponent implements OnInit {
         allowedDelayHours: Number(val.penalties.allowedDelayHours),
         maintenancePenalty: Number(val.penalties.maintenancePenalty),
         accidentPenalty: Number(val.penalties.accidentPenalty)
-      },
-
-      driverTerms: {
-        driverFare: Number(val.driverTerms.driverFare),
-        driverWorkingHoursPerDay: Number(val.driverTerms.driverWorkingHoursPerDay),
-        driverOvertimeAmountPerHour: Number(val.driverTerms.driverOvertimeAmountPerHour),
-        dailyRate: Number(val.driverTerms.dailyRate)
-      },
-
-      mileage: {
-        kilometerPerDay: Number(val.mileage.kilometerPerDay),
-        maximumKilometerPerDay: Number(val.mileage.maximumKilometerPerDay),
-        amountOfKmExceedingLimit: Number(val.mileage.amountOfKmExceedingLimit)
-      },
-
-      maintenance: {
-        nextMaintenanceDate: val.maintenance?.nextMaintenanceDate ? new Date(val.maintenance.nextMaintenanceDate).toISOString() : undefined,
-        nextMaintenanceKm: Number(val.maintenance?.nextMaintenanceKm),
-        reminderBeforePeriodicMaintenance: Number(val.maintenance?.reminderBeforePeriodicMaintenance),
-        notificationType: Number(val.maintenance?.notificationType)
       }
     };
 
     this.contractService.create(dto).subscribe({
-      next: (res) => {
+      next: () => {
         this.isSubmitting.set(false);
-        this.successMessage.set('Contract created successfully!');
+        this.successMessage.set('Contract created and activated successfully!');
         setTimeout(() => {
           this.router.navigate(['/rentals/contracts']);
-        }, 1200);
+        }, 1000);
       },
       error: (err) => {
         this.isSubmitting.set(false);
@@ -343,4 +371,3 @@ export class AddContractComponent implements OnInit {
     this.router.navigate(['/rentals/contracts']);
   }
 }
-

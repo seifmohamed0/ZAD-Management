@@ -2,7 +2,7 @@ namespace ZAD_Management.Domain.ValueObjects;
 
 public class DriverSnapshot
 {
-    public string? SecondDriverName { get; private set; }
+    public string? DriverName { get; private set; }
     public string? Nationality { get; private set; }
     public string? LicenseNumber { get; private set; }
     public DateTime? LicenseExpireDate { get; private set; }
@@ -12,14 +12,14 @@ public class DriverSnapshot
     private DriverSnapshot() { }
 
     public DriverSnapshot(
-        string? secondDriverName,
+        string? driverName,
         string? nationality,
         string? licenseNumber,
         DateTime? licenseExpireDate,
         string? idNumber,
         DateTime? idExpireDate)
     {
-        SecondDriverName = secondDriverName;
+        DriverName = driverName;
         Nationality = nationality;
         LicenseNumber = licenseNumber;
         LicenseExpireDate = licenseExpireDate;

@@ -897,17 +897,15 @@
           "ZAD-Management.Domain": "1.0.0"
         },
         "runtime": {
-          "ZAD-Management.Application.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
+          "ZAD-management.Application.dll": {
+            "fileVersion": "0.0.0.0"
           }
         }
       },
       "ZAD-Management.Domain/1.0.0": {
         "runtime": {
-          "ZAD-Management.Domain.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
+          "ZAD-management.Domain.dll": {
+            "fileVersion": "0.0.0.0"
           }
         }
       }

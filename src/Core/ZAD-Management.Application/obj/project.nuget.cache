@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vEfNI46oY+g=",
+  "dgSpecHash": "XLHqtGP494A=",
   "success": true,
-  "projectFilePath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj",
+  "projectFilePath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\morni\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\morni\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

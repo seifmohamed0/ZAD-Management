@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZAD-Management.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7525e06d5bcf436452813d7380146eb275d04100")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+403810149228a677640b0c05d86dcdce8fac209b")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZAD-Management.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZAD-Management.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

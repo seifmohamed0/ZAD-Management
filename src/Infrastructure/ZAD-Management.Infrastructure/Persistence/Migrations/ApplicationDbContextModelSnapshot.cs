@@ -160,9 +160,12 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AccountingNo")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<DateTime?>("ActualReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("ActualReturnKm")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("BranchId")
                         .HasColumnType("int");
@@ -181,28 +184,24 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<decimal>("FinalBaseRent")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("DriverName")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                    b.Property<decimal>("FinalDelayPenalty")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("FinalDiscount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("FinalTotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("PaymentType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReferenceNo")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -252,16 +251,6 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                             b1.Property<int>("RentalContractId")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("ActualPeriodInDays")
-                                .HasColumnType("int")
-                                .HasColumnName("ActualPeriodInDays");
-
-                            b1.Property<string>("DeliveryDay")
-                                .IsRequired()
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)")
-                                .HasColumnName("DeliveryDay");
-
                             b1.Property<DateTime>("ExpectedReceivingDate")
                                 .HasColumnType("datetime2")
                                 .HasColumnName("ExpectedReceivingDate");
@@ -278,12 +267,6 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                                 .HasColumnType("datetime2")
                                 .HasColumnName("StartDate");
 
-                            b1.Property<string>("StartDay")
-                                .IsRequired()
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)")
-                                .HasColumnName("StartDay");
-
                             b1.Property<TimeSpan>("StartTime")
                                 .HasColumnType("time")
                                 .HasColumnName("StartTime");
@@ -296,96 +279,38 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("RentalContractId");
                         });
 
-                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.DriverSnapshot", "SecondDriver", b1 =>
+                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.DriverSnapshot", "Driver", b1 =>
                         {
                             b1.Property<int>("RentalContractId")
                                 .HasColumnType("int");
 
+                            b1.Property<string>("DriverName")
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("DriverName");
+
                             b1.Property<DateTime?>("IdExpireDate")
                                 .HasColumnType("datetime2")
-                                .HasColumnName("SecondDriverIdExpireDate");
+                                .HasColumnName("DriverIdExpireDate");
 
                             b1.Property<string>("IdNumber")
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)")
-                                .HasColumnName("SecondDriverIdNumber");
+                                .HasColumnName("DriverIdNumber");
 
                             b1.Property<DateTime?>("LicenseExpireDate")
                                 .HasColumnType("datetime2")
-                                .HasColumnName("SecondDriverLicenseExpireDate");
+                                .HasColumnName("DriverLicenseExpireDate");
 
                             b1.Property<string>("LicenseNumber")
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)")
-                                .HasColumnName("SecondDriverLicenseNumber");
+                                .HasColumnName("DriverLicenseNumber");
 
                             b1.Property<string>("Nationality")
                                 .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasColumnName("SecondDriverNationality");
-
-                            b1.Property<string>("SecondDriverName")
-                                .HasMaxLength(200)
-                                .HasColumnType("nvarchar(200)")
-                                .HasColumnName("SecondDriverName");
-
-                            b1.HasKey("RentalContractId");
-
-                            b1.ToTable("RentalContracts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RentalContractId");
-                        });
-
-                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.MaintenanceAlert", "Maintenance", b1 =>
-                        {
-                            b1.Property<int>("RentalContractId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("NextMaintenanceDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("NextMaintenanceDate");
-
-                            b1.Property<decimal?>("NextMaintenanceKm")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("NextMaintenanceKm");
-
-                            b1.Property<int>("NotificationType")
-                                .HasColumnType("int")
-                                .HasColumnName("NotificationType");
-
-                            b1.Property<int>("ReminderBeforePeriodicMaintenance")
-                                .HasColumnType("int")
-                                .HasColumnName("ReminderBeforePeriodicMaintenance");
-
-                            b1.HasKey("RentalContractId");
-
-                            b1.ToTable("RentalContracts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RentalContractId");
-                        });
-
-                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.MileagePolicy", "Mileage", b1 =>
-                        {
-                            b1.Property<int>("RentalContractId")
-                                .HasColumnType("int");
-
-                            b1.Property<decimal>("AmountOfKmExceedingLimit")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("AmountOfKmExceedingLimit");
-
-                            b1.Property<decimal>("KilometerPerDay")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("KilometerPerDay");
-
-                            b1.Property<decimal>("MaximumKilometerPerDay")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("MaximumKilometerPerDay");
+                                .HasColumnName("DriverNationality");
 
                             b1.HasKey("RentalContractId");
 
@@ -419,39 +344,6 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                                 .HasPrecision(18, 2)
                                 .HasColumnType("decimal(18,2)")
                                 .HasColumnName("MaintenancePenalty");
-
-                            b1.HasKey("RentalContractId");
-
-                            b1.ToTable("RentalContracts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RentalContractId");
-                        });
-
-                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.PrivateDriverTerms", "DriverTerms", b1 =>
-                        {
-                            b1.Property<int>("RentalContractId")
-                                .HasColumnType("int");
-
-                            b1.Property<decimal>("DailyRate")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("DriverDailyRate");
-
-                            b1.Property<decimal>("DriverFare")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("DriverFare");
-
-                            b1.Property<decimal>("DriverOvertimeAmountPerHour")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("DriverOvertimeAmountPerHour");
-
-                            b1.Property<decimal>("DriverWorkingHoursPerDay")
-                                .HasPrecision(5, 2)
-                                .HasColumnType("decimal(5,2)")
-                                .HasColumnName("DriverWorkingHoursPerDay");
 
                             b1.HasKey("RentalContractId");
 
@@ -499,11 +391,10 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                             b1.Property<int>("RentalContractId")
                                 .HasColumnType("int");
 
-                            b1.Property<string>("FileNo")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("VehicleFileNo");
+                            b1.Property<decimal>("KilometerCounter")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("StartKilometerCounter");
 
                             b1.Property<string>("ModelYear")
                                 .IsRequired()
@@ -517,57 +408,6 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                                 .HasColumnType("nvarchar(50)")
                                 .HasColumnName("VehiclePlateNo");
 
-                            b1.Property<decimal?>("ReturnKilometerCounter")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("ReturnKilometerCounter");
-
-                            b1.Property<decimal>("StartKilometerCounter")
-                                .HasPrecision(18, 2)
-                                .HasColumnType("decimal(18,2)")
-                                .HasColumnName("StartKilometerCounter");
-
-                            b1.HasKey("RentalContractId");
-
-                            b1.ToTable("RentalContracts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RentalContractId");
-                        });
-
-                    b.OwnsOne("ZAD_Management.Domain.ValueObjects.SponsorSnapshot", "Sponsor", b1 =>
-                        {
-                            b1.Property<int>("RentalContractId")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime?>("IdExpireDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("SponsorIdExpireDate");
-
-                            b1.Property<string>("IdNumber")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("SponsorIdNumber");
-
-                            b1.Property<DateTime?>("LicenseExpireDate")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("SponsorLicenseExpireDate");
-
-                            b1.Property<string>("LicenseNumber")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("SponsorLicenseNumber");
-
-                            b1.Property<string>("Nationality")
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)")
-                                .HasColumnName("SponsorNationality");
-
-                            b1.Property<string>("SponsorName")
-                                .HasMaxLength(200)
-                                .HasColumnType("nvarchar(200)")
-                                .HasColumnName("SponsorName");
-
                             b1.HasKey("RentalContractId");
 
                             b1.ToTable("RentalContracts");
@@ -580,10 +420,6 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                         {
                             b1.Property<int>("RentalContractId")
                                 .HasColumnType("int");
-
-                            b1.Property<int?>("Age")
-                                .HasColumnType("int")
-                                .HasColumnName("TenantAge");
 
                             b1.Property<string>("IdNumber")
                                 .IsRequired()
@@ -603,25 +439,11 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                                 .HasColumnType("nvarchar(25)")
                                 .HasColumnName("TenantMobile");
 
-                            b1.Property<string>("PassportNumber")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("TenantPassportNumber");
-
-                            b1.Property<DateTime?>("TenantBirthday")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("TenantBirthday");
-
                             b1.Property<string>("TenantName")
                                 .IsRequired()
                                 .HasMaxLength(200)
                                 .HasColumnType("nvarchar(200)")
                                 .HasColumnName("TenantName");
-
-                            b1.Property<string>("UnifiedNumber")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("TenantUnifiedNumber");
 
                             b1.HasKey("RentalContractId");
 
@@ -635,12 +457,7 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Company");
 
-                    b.Navigation("DriverTerms");
-
-                    b.Navigation("Maintenance");
-
-                    b.Navigation("Mileage")
-                        .IsRequired();
+                    b.Navigation("Driver");
 
                     b.Navigation("Penalties")
                         .IsRequired();
@@ -650,10 +467,6 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Pricing")
                         .IsRequired();
-
-                    b.Navigation("SecondDriver");
-
-                    b.Navigation("Sponsor");
 
                     b.Navigation("Tenant")
                         .IsRequired();

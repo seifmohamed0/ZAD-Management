@@ -1,5 +1,5 @@
 <div class="page-container">
-  <!-- Sub-nav Header -->
+  <!-- Sub-nav Header with Company & Branch Selector -->
   <div class="sub-nav">
     <div class="sub-nav-left">
       <div class="zad-badge">ZAD</div>
@@ -9,11 +9,46 @@
         <a routerLink="/rentals/contracts">Insurance and Maintenance ▾</a>
         <a routerLink="/rentals/contracts">Issues ▾</a>
         <a routerLink="/rentals/contracts">Reports ▾</a>
-        <a routerLink="/rentals/contracts">Configuration ▾</a>
       </div>
     </div>
+
+    <!-- Company & Branch Navbar Selector (Top Right) -->
     <div class="sub-nav-right">
-      <button class="nav-icon-btn" (click)="goToAddContract()" title="Add Contract">+</button>
+      <div class="nav-selector-group">
+        <!-- Company Selector -->
+        <div class="selector-item">
+          <label class="selector-label">Company:</label>
+          <select
+            class="nav-select-pill"
+            [ngModel]="state.selectedCompanyId()"
+            (ngModelChange)="onCompanyChange($event)"
+          >
+            <option [ngValue]="null" disabled>Select Company</option>
+            @for (comp of state.companies(); track comp.id) {
+              <option [value]="comp.id">{{ comp.englishName || comp.arabicName }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Branch Selector -->
+        <div class="selector-item">
+          <label class="selector-label">Branch:</label>
+          <select
+            class="nav-select-pill"
+            [ngModel]="state.selectedBranchId()"
+            (ngModelChange)="onBranchChange($event)"
+          >
+            <option [ngValue]="null">All Branches</option>
+            @for (br of state.filteredBranches(); track br.id) {
+              <option [value]="br.id">{{ br.englishName || br.arabicName }}</option>
+            }
+          </select>
+        </div>
+
+        <button class="btn btn-primary btn-sm" (click)="goToAddContract()" title="Add New Contract">
+          + Add Contract
+        </button>
+      </div>
     </div>
   </div>
 
@@ -28,22 +63,11 @@
       </div>
 
       <div class="filter-search-group">
-        <!-- Filter by Branch -->
-        <select
-          class="form-select filter-select"
-          [ngModel]="selectedBranchFilter()"
-          (ngModelChange)="selectedBranchFilter.set($event); loadContracts()"
-        >
-          <option [ngValue]="null">All Branches</option>
-          @for (b of state.branches(); track b.id) {
-            <option [value]="b.id">{{ b.englishName || b.arabicName }}</option>
-          }
-        </select>
-
+        <!-- Search by ID, Contract No, Tenant or Plate -->
         <div class="search-box">
           <input
             type="text"
-            placeholder="Search contracts..."
+            placeholder="Search by ID, Contract #, Tenant, Plate..."
             [ngModel]="searchTerm()"
             (ngModelChange)="searchTerm.set($event)"
           />
@@ -57,9 +81,9 @@
 
     <!-- Action Bar -->
     <div class="toolbar-row">
-      <button class="btn btn-primary" (click)="goToAddContract()">
-        <span>+</span> Add Contract
-      </button>
+      <div class="toolbar-stats">
+        <span class="contracts-count">Total: <strong>{{ filteredContracts.length }}</strong> contracts</span>
+      </div>
 
       <div class="export-tools">
         <button class="tool-btn" title="Excel Export">
@@ -70,13 +94,6 @@
             <line x1="16" y1="13" x2="8" y2="17"></line>
           </svg>
         </button>
-        <button class="tool-btn" title="Download">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-        </button>
       </div>
     </div>
 
@@ -85,30 +102,39 @@
       <table>
         <thead>
           <tr>
-            <th width="40"><input type="checkbox" /></th>
+            <th width="50">ID</th>
             <th>Contract No.</th>
+            <th>Type</th>
             <th>Tenant Name</th>
             <th>Mobile</th>
             <th>Vehicle Plate</th>
             <th>Branch</th>
             <th>Start Date</th>
             <th>Receiving Date</th>
-            <th>Days</th>
-            <th>Net Price</th>
+            <th>Rate</th>
             <th>Status</th>
-            <th width="80">Actions</th>
+            <th width="120">Actions</th>
           </tr>
         </thead>
         <tbody>
           @if (filteredContracts.length === 0) {
             <tr>
-              <td colspan="12" class="empty-state">No rental contracts found. Click "+ Add Contract" to create one.</td>
+              <td colspan="12" class="empty-state">
+                @if (isLoading()) {
+                  Loading contracts...
+                } @else {
+                  No rental contracts found. Click "+ Add Contract" to create one.
+                }
+              </td>
             </tr>
           }
           @for (c of filteredContracts; track c.id) {
             <tr>
-              <td><input type="checkbox" /></td>
+              <td class="font-bold id-cell">#{{ c.id }}</td>
               <td class="font-bold contract-no">{{ c.contractNumber }}</td>
+              <td>
+                <span class="type-pill">{{ c.contractTypeName }}</span>
+              </td>
               <td>{{ c.tenantName }}</td>
               <td>{{ c.tenantMobile }}</td>
               <td>
@@ -117,7 +143,6 @@
               <td>{{ c.branchName }}</td>
               <td>{{ c.startDate | date:'yyyy-MM-dd' }}</td>
               <td>{{ c.expectedReceivingDate | date:'yyyy-MM-dd' }}</td>
-              <td>{{ c.periodInDays }} d</td>
               <td class="price-cell">{{ c.netRentPrice | number:'1.2-2' }} {{ c.currency }}</td>
               <td>
                 <span class="badge" [ngClass]="getStatusClass(c.status)">
@@ -126,12 +151,27 @@
               </td>
               <td>
                 <div class="action-buttons">
-                  <button class="action-btn" title="View Contract Details">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                  </button>
+                  @if (c.status === ContractStatus.Active) {
+                    <!-- End Contract Button -->
+                    <button
+                      class="btn-end-contract"
+                      (click)="openCloseModal(c)"
+                      title="End and calculate final invoice"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      End Contract
+                    </button>
+                  } @else {
+                    <span class="closed-label">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      Closed
+                    </span>
+                  }
                 </div>
               </td>
             </tr>
@@ -142,3 +182,121 @@
   </div>
 </div>
 
+<!-- End Contract / Calculation Modal -->
+@if (isCloseModalOpen()) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <h3>End Rental Contract</h3>
+          <p class="modal-sub">
+            Contract: <strong>{{ selectedContractForClose()?.contractNumber }}</strong> (ID: #{{ selectedContractForClose()?.id }})
+          </p>
+        </div>
+        <button class="close-x" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        @if (closeError()) {
+          <div class="alert alert-danger">
+            {{ closeError() }}
+          </div>
+        }
+
+        <!-- Contract Snapshot Summary -->
+        <div class="snapshot-card">
+          <div class="snapshot-row">
+            <div><span>Tenant:</span> <strong>{{ selectedContractForClose()?.tenantName }}</strong></div>
+            <div><span>Vehicle:</span> <strong class="plate-badge">{{ selectedContractForClose()?.vehiclePlateNo }}</strong></div>
+            <div><span>Type:</span> <strong class="type-pill">{{ selectedContractForClose()?.contractTypeName }}</strong></div>
+            <div><span>Rate:</span> <strong>{{ selectedContractForClose()?.netRentPrice | number:'1.2-2' }} {{ selectedContractForClose()?.currency }}</strong></div>
+          </div>
+          <div class="snapshot-row" style="margin-top: 8px;">
+            <div><span>Start Date:</span> {{ selectedContractForClose()?.startDate | date:'yyyy-MM-dd HH:mm' }}</div>
+            <div><span>Expected Return:</span> {{ selectedContractForClose()?.expectedReceivingDate | date:'yyyy-MM-dd' }}</div>
+          </div>
+        </div>
+
+        @if (!calculationResult()) {
+          <!-- Return Input Form -->
+          <div class="form-section">
+            <h4 class="section-title">Return Details</h4>
+
+            <div class="form-group">
+              <label>Actual Return Date & Time <span class="required">*</span></label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                [ngModel]="actualReturnDate()"
+                (ngModelChange)="actualReturnDate.set($event)"
+              />
+              <small class="form-hint">Used by the strategy engine to calculate duration & delay penalty.</small>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label>Return Odometer (Kilometer Counter)</label>
+              <input
+                type="number"
+                class="form-control"
+                [ngModel]="returnKm()"
+                (ngModelChange)="returnKm.set($event)"
+                placeholder="Enter return KM reading"
+                min="0"
+              />
+            </div>
+          </div>
+        } @else {
+          <!-- Final Invoice Breakdown Result -->
+          <div class="invoice-result-card">
+            <div class="invoice-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#105952" stroke-width="2.5">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span>Contract Successfully Closed & Calculated</span>
+            </div>
+
+            <div class="invoice-table">
+              <div class="invoice-row">
+                <span>Base Rent</span>
+                <strong>{{ calculationResult()?.baseRent | number:'1.2-2' }} {{ selectedContractForClose()?.currency }}</strong>
+              </div>
+              <div class="invoice-row discount-row">
+                <span>Discount</span>
+                <strong>- {{ calculationResult()?.discountAmount | number:'1.2-2' }} {{ selectedContractForClose()?.currency }}</strong>
+              </div>
+              <div class="invoice-row penalty-row">
+                <span>Delay Penalty</span>
+                <strong>+ {{ calculationResult()?.delayPenalty | number:'1.2-2' }} {{ selectedContractForClose()?.currency }}</strong>
+              </div>
+              <div class="invoice-divider"></div>
+              <div class="invoice-row total-row">
+                <span>Total Amount Due</span>
+                <span class="total-value">{{ calculationResult()?.totalAmount | number:'1.2-2' }} {{ selectedContractForClose()?.currency }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="modal-footer">
+        @if (!calculationResult()) {
+          <button class="btn btn-secondary" (click)="closeModal()" [disabled]="isClosing()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" (click)="submitCloseContract()" [disabled]="isClosing()">
+            @if (isClosing()) {
+              Calculating & Closing...
+            } @else {
+              Calculate & Close Contract
+            }
+          </button>
+        } @else {
+          <button class="btn btn-primary" (click)="closeModal()">
+            Done
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using ZAD_Management.Domain.Factories;
 
 namespace ZAD_Management.Application.DependencyInjection;
 
@@ -10,6 +11,8 @@ public static class DependencyInjection
     {
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+        services.AddScoped<IRentalContractFactory, RentalContractFactory>();
 
         return services;
     }

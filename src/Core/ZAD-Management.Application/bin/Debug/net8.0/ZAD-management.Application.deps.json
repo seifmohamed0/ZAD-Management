@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "ZAD-Management.Application/1.0.0": {
+      "ZAD-management.Application/1.0.0": {
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "FluentValidation.DependencyInjectionExtensions": "12.1.1",
@@ -14,7 +14,7 @@
           "ZAD-Management.Domain": "1.0.0"
         },
         "runtime": {
-          "ZAD-Management.Application.dll": {}
+          "ZAD-management.Application.dll": {}
         }
       },
       "AutoMapper/12.0.1": {
@@ -107,16 +107,15 @@
       },
       "ZAD-Management.Domain/1.0.0": {
         "runtime": {
-          "ZAD-Management.Domain.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
+          "ZAD-management.Domain.dll": {
+            "fileVersion": "0.0.0.0"
           }
         }
       }
     }
   },
   "libraries": {
-    "ZAD-Management.Application/1.0.0": {
+    "ZAD-management.Application/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -142,6 +142,7 @@ C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.csproj.CoreCompileInputs.cache
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.sourcelink.json
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\rjimswa.dswa.cache.json
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
@@ -157,4 +158,3 @@ C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.pdb
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.genruntimeconfig.cache
 C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ref\ZAD-Management.API.dll
-C:\Projects\ZAD-Management\src\Presentation\ZAD-Management.API\obj\Debug\net8.0\ZAD-Management.API.sourcelink.json

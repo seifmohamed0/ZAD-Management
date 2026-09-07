@@ -168,14 +168,14 @@
           "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
-      "ZAD-management.Domain/1.0.0": {
+      "ZAD-Management.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "compile": {
-          "bin/placeholder/ZAD-management.Domain.dll": {}
+          "bin/placeholder/ZAD-Management.Domain.dll": {}
         },
         "runtime": {
-          "bin/placeholder/ZAD-management.Domain.dll": {}
+          "bin/placeholder/ZAD-Management.Domain.dll": {}
         }
       }
     }
@@ -443,10 +443,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "ZAD-management.Domain/1.0.0": {
+    "ZAD-Management.Domain/1.0.0": {
       "type": "project",
-      "path": "../ZAD-Management.Domain/ZAD-management.Domain.csproj",
-      "msbuildProject": "../ZAD-Management.Domain/ZAD-management.Domain.csproj"
+      "path": "../ZAD-Management.Domain/ZAD-Management.Domain.csproj",
+      "msbuildProject": "../ZAD-Management.Domain/ZAD-Management.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -454,7 +454,7 @@
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.1",
       "FluentValidation.DependencyInjectionExtensions >= 12.1.1",
       "MediatR >= 12.4.1",
-      "ZAD-management.Domain >= 1.0.0"
+      "ZAD-Management.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -464,9 +464,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj",
-      "projectName": "ZAD-management.Application",
-      "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-management.Application.csproj",
+      "projectUniqueName": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj",
+      "projectName": "ZAD-Management.Application",
+      "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\ZAD-Management.Application.csproj",
       "packagesPath": "C:\\Users\\morni\\.nuget\\packages\\",
       "outputPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Application\\obj\\",
       "projectStyle": "PackageReference",
@@ -489,8 +489,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj": {
-              "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj"
+            "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj": {
+              "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj"
             }
           }
         }

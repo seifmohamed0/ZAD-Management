@@ -1,14 +1,20 @@
 export enum ContractStatus {
-  Draft = 1,
-  Active = 2,
-  Closed = 3,
-  Cancelled = 4
+  Active = 1,
+  Closed = 2
 }
 
 export enum ContractType {
-  Daily = 1,
-  Weekly = 2,
-  Monthly = 3
+  Hourly = 1,
+  Daily = 2,
+  Weekly = 3,
+  Monthly = 4
+}
+
+export interface RentalCalculationResult {
+  baseRent: number;
+  discountAmount: number;
+  delayPenalty: number;
+  totalAmount: number;
 }
 
 export enum PaymentType {
@@ -211,7 +217,7 @@ export interface CreateRentalContractDto {
     dailyRate: number;
   };
 
-  mileage: {
+  mileage?: {
     kilometerPerDay: number;
     maximumKilometerPerDay: number;
     amountOfKmExceedingLimit: number;

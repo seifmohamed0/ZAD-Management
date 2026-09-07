@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ZAD_Management.Application.Features.Rentals.Contracts.Commands.CloseRentalContract;
 using ZAD_Management.Application.Features.Rentals.Contracts.Commands.CreateRentalContract;
 using ZAD_Management.Application.Features.Rentals.Contracts.DTOs;
 using ZAD_Management.Application.Features.Rentals.Contracts.Queries.GetAllRentalContracts;
@@ -40,6 +41,13 @@ public class ContractsController : ControllerBase
     {
         var id = await _mediator.Send(new CreateRentalContractCommand(dto));
         return CreatedAtAction(nameof(GetById), new { id }, new { id, message = "Rental contract created successfully." });
+    }
+
+    [HttpPost("{id:int}/close")]
+    public async Task<IActionResult> Close(int id, [FromBody] CloseRentalContractDto dto)
+    {
+        var result = await _mediator.Send(new CloseRentalContractCommand(id, dto.ActualReturnDate, dto.ReturnKm));
+        return Ok(result);
     }
 }
 

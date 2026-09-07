@@ -23,7 +23,7 @@ public class GetAllRentalContractsHandler : IRequestHandler<GetAllRentalContract
         {
             Id = c.Id,
             ContractNumber = c.ContractNumber,
-            ReferenceNo = c.ReferenceNo,
+            ReferenceNo = null,
             CompanyName = c.Company?.EnglishName ?? string.Empty,
             BranchName = c.Branch?.EnglishName ?? string.Empty,
             TenantName = c.Tenant.TenantName,
@@ -33,10 +33,9 @@ public class GetAllRentalContractsHandler : IRequestHandler<GetAllRentalContract
             ExpectedReceivingDate = c.Period.ExpectedReceivingDate,
             PeriodInDays = c.Period.PeriodInDays,
             NetRentPrice = c.Pricing.NetRentPrice,
-            Currency = c.Currency,
+            Currency = "SAR",
             Status = c.Status,
             ContractType = c.ContractType
         }).ToList();
     }
 }
-
