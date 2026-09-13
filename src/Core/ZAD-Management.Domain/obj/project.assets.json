@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj",
-      "projectName": "ZAD-management.Domain",
-      "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-management.Domain.csproj",
+      "projectUniqueName": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj",
+      "projectName": "ZAD-Management.Domain",
+      "projectPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\ZAD-Management.Domain.csproj",
       "packagesPath": "C:\\Users\\morni\\.nuget\\packages\\",
       "outputPath": "C:\\Projects\\ZAD-Management\\src\\Core\\ZAD-Management.Domain\\obj\\",
       "projectStyle": "PackageReference",

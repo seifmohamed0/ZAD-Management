@@ -25,10 +25,11 @@
         <span class="breadcrumb-sep">/</span>
         <a routerLink="/rentals/contracts" class="breadcrumb-parent">Contracts</a>
         <span class="breadcrumb-sep">/</span>
-        <span class="breadcrumb-current">Add Contract</span>
+        <span class="breadcrumb-current">{{ isExisting() ? 'Close Contract' : 'Add Contract' }}</span>
       </div>
 
       <div class="action-tools">
+        @if (!isExisting()) {
         <button class="save-icon-btn" (click)="saveContract()" [disabled]="isSubmitting()" title="Save & Activate Contract">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
@@ -37,6 +38,7 @@
           </svg>
           <span class="btn-text">Save & Activate</span>
         </button>
+        }
         <button class="exit-icon-btn" (click)="cancel()" title="Cancel & Close">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -130,6 +132,7 @@
               <option [value]="ContractType.Hourly">Hourly (بالساعة)</option>
               <option [value]="ContractType.Weekly">Weekly (أسبوعي)</option>
               <option [value]="ContractType.Monthly">Monthly (شهري)</option>
+              <option [value]="ContractType.Yearly">Yearly (سنوي)</option>
             </select>
           </div>
 
@@ -207,6 +210,11 @@
         >
           🚗 Vehicle & Pricing (السيارة والأسعار)
         </button>
+        @if (isExisting()) {
+          <button type="button" class="tab-btn" [class.active]="activeTab() === 'close'" (click)="setTab('close')">
+            ✓ Receiving & Close (استلام وإغلاق العقد)
+          </button>
+        }
       </div>
 
       <!-- TAB 1: TENANT & DRIVER -->
@@ -279,17 +287,27 @@
             <legend class="section-legend">Rented Vehicle (السيارة)</legend>
             <div class="four-grid">
               <div class="form-group">
-                <label>Vehicle Plate No. *</label>
-                <input type="text" formControlName="plateNo" class="form-control" placeholder="e.g. أ ب ج 1234" />
+                <label>Plate No. *</label>
+                <select formControlName="plateNo" class="form-select">
+                  <option value="">Select one</option>
+                  @for (vehicle of dummyVehicles; track vehicle.plateNo) {
+                    <option [value]="vehicle.plateNo">{{ vehicle.label }}</option>
+                  }
+                </select>
               </div>
 
               <div class="form-group">
-                <label>Model Year</label>
+                <label>Model year</label>
                 <input type="text" formControlName="modelYear" class="form-control" placeholder="e.g. 2024" />
               </div>
 
               <div class="form-group">
-                <label>Starting Kilometer Counter *</label>
+                <label>File No.</label>
+                <input type="text" formControlName="fileNo" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <label>Kilometer counter *</label>
                 <input type="number" formControlName="startKilometerCounter" class="form-control" min="0" />
               </div>
             </div>
@@ -297,10 +315,10 @@
 
           <!-- Pricing Card -->
           <fieldset class="section-card" formGroupName="pricing">
-            <legend class="section-legend">Rental Pricing (أسعار الإيجار)</legend>
+            <legend class="section-legend">Rent Price</legend>
             <div class="four-grid">
               <div class="form-group">
-                <label>Rent Price (Unit Rate) *</label>
+                <label>Rent Price *</label>
                 <input type="number" formControlName="rentPrice" class="form-control" min="0" />
               </div>
 
@@ -323,7 +341,7 @@
 
           <!-- Penalties Policy Card -->
           <fieldset class="section-card" formGroupName="penalties">
-            <legend class="section-legend">Penalties Policy (سياسة الغرامات والتأخير)</legend>
+            <legend class="section-legend">Penalties</legend>
             <div class="four-grid">
               <div class="form-group">
                 <label>Delay Penalty Per Hour</label>
@@ -346,12 +364,144 @@
               </div>
             </div>
           </fieldset>
+
+          @if (form.get('withDriver')?.value) {
+            <fieldset class="section-card" formGroupName="driverTerms">
+              <legend class="section-legend">Private Driver</legend>
+              <div class="four-grid">
+                <div class="form-group">
+                  <label>Driver Fare</label>
+                  <input type="number" formControlName="driverFare" class="form-control" min="0" />
+                </div>
+                <div class="form-group">
+                  <label>Driver working hours per day</label>
+                  <input type="number" formControlName="driverWorkingHoursPerDay" class="form-control" min="0" />
+                </div>
+                <div class="form-group">
+                  <label>Driver overtime amount per hour</label>
+                  <input type="number" formControlName="driverOvertimeAmountPerHour" class="form-control" min="0" />
+                </div>
+                <div class="form-group">
+                  <label>Daily Rate</label>
+                  <input type="number" formControlName="dailyRate" class="form-control" min="0" />
+                </div>
+              </div>
+            </fieldset>
+          }
+
+          <fieldset class="section-card" formGroupName="mileage">
+            <legend class="section-legend">Kilometer Per Day</legend>
+            <div class="three-grid">
+              <div class="form-group">
+                <label>Kilometer Per Day</label>
+                <input type="number" formControlName="kilometerPerDay" class="form-control" min="0" />
+              </div>
+              <div class="form-group">
+                <label>Maximum Kilometer Per Day</label>
+                <input type="number" formControlName="maximumKilometerPerDay" class="form-control" min="0" />
+              </div>
+              <div class="form-group">
+                <label>Amount of KM Exceeding the Limit</label>
+                <input type="number" formControlName="amountOfKmExceedingLimit" class="form-control" min="0" />
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="section-card" formGroupName="maintenance">
+            <legend class="section-legend">Next Maintenance</legend>
+            <div class="four-grid">
+              <div class="form-group">
+                <label>Next Maintenance Date</label>
+                <input type="date" formControlName="nextMaintenanceDate" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label>Next Maintenance KM</label>
+                <input type="number" formControlName="nextMaintenanceKm" class="form-control" min="0" />
+              </div>
+              <div class="form-group">
+                <label>Reminder Before-Periodic Maintenance</label>
+                <input type="number" formControlName="reminderBeforePeriodicMaintenance" class="form-control" min="0" />
+              </div>
+              <div class="form-group">
+                <label>Notification type</label>
+                <select formControlName="notificationType" class="form-select">
+                  <option [value]="NotificationType.Kilometer">Kilometer</option>
+                  <option [value]="NotificationType.Date">Date</option>
+                  <option [value]="NotificationType.Both">Both</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      }
+
+      @if (activeTab() === 'close') {
+        <div class="tab-content close-tab-content">
+          <fieldset class="section-card close-section receiving-section">
+            <legend class="section-legend">Receiving Settings</legend>
+            <div class="close-settings-grid">
+              <div class="form-group"><label>Vehicle Branch</label><input class="form-control" [value]="existingContract()?.branchName || 'Main Branch'" readonly /></div>
+              <div class="form-group"><label>Receiving Time</label><input type="time" class="form-control" [value]="closeDate.substring(11, 16)" (change)="closeDate = closeDate.substring(0, 11) + $any($event.target).value; refreshClosePreview()" [disabled]="isClosed()" /></div>
+              <div class="form-group"><label>Receiving Date</label><input type="date" class="form-control" [value]="closeDate.substring(0, 10)" (change)="closeDate = $any($event.target).value + closeDate.substring(10); refreshClosePreview()" [disabled]="isClosed()" /></div>
+              <div class="form-group"><label>Day</label><input class="form-control calculated-field" [value]="closeDate ? (closeDate | date:'EEEE') : '-'" readonly /></div>
+              <div class="form-group"><label>Contract Type</label><input class="form-control" [value]="existingContract()?.contractTypeName || '-'" readonly /></div>
+              <div class="form-group"><label>Actual Period In Days</label><input class="form-control calculated-field" [value]="closeResult()?.actualPeriodInDays || '-'" readonly /></div>
+              <div class="form-group"><label>Delay Hours</label><input class="form-control calculated-field" [value]="closeResult()?.delayHours || '-'" readonly /></div>
+              <div class="form-group"><label>Receiving Kilometer Counter</label><input type="number" class="form-control" [(ngModel)]="closeKm" (ngModelChange)="refreshClosePreview()" [ngModelOptions]="{standalone: true}" min="0" [disabled]="isClosed()" /></div>
+              <div class="form-group"><label>Driver Name</label><input class="form-control" [value]="existingContract()?.driverName || '-'" readonly /></div>
+              <div class="form-group close-notes-field"><label>Notes</label><textarea class="form-control" rows="2" [(ngModel)]="closeNotes" [ngModelOptions]="{standalone: true}" [disabled]="isClosed()"></textarea></div>
+            </div>
+          </fieldset>
+
+          <div class="close-calculation-layout">
+            <fieldset class="section-card close-section">
+              <legend class="section-legend">Kilometer Calculation</legend>
+              <div class="close-value-list">
+                <div class="close-value-row"><label>Receiving Kilometer Counter</label><strong>{{ closeKm || '-' }}</strong></div>
+                <div class="close-value-row"><label>Renting Kilometer Counter</label><strong>{{ existingContract()?.startKilometerCounter || '-' }}</strong></div>
+                <div class="close-value-row"><label>AVG Kilometers Per Day</label><strong>{{ closeResult()?.actualPeriodInDays ? (closeResult()!.totalConsumptionKilometers / closeResult()!.actualPeriodInDays | number:'1.2-2') : '-' }}</strong></div>
+                <div class="close-value-row"><label>KM Exceeded the Limit</label><strong>{{ closeResult()?.exceededKilometers || 0 }}</strong></div>
+              </div>
+            </fieldset>
+            <fieldset class="section-card close-section">
+              <legend class="section-legend">Mileage Limits</legend>
+              <div class="close-value-list">
+                <div class="close-value-row"><label>Total Consumption Kilometers</label><strong>{{ closeResult()?.totalConsumptionKilometers || 0 }}</strong></div>
+                <div class="close-value-row"><label>Free KM</label><strong>{{ closeResult()?.freeKilometers || 0 }}</strong></div>
+                <div class="close-value-row"><label>Amount of KM Exceeding the Limit</label><strong>{{ closeResult()?.exceededKilometersAmount || 0 }}</strong></div>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="close-settlement-layout">
+            <fieldset class="section-card close-section">
+              <legend class="section-legend">Penalties</legend>
+              <div class="close-value-list">
+                <div class="close-value-row"><label>Delay Penalty / Amount</label><strong>{{ closeResult()?.delayPenalty || 0 }}</strong></div>
+                <div class="close-value-row"><label>Maintenance Penalty Amount</label><input type="number" class="inline-number" [(ngModel)]="maintenancePenaltyAmount" (ngModelChange)="refreshClosePreview()" [ngModelOptions]="{standalone: true}" min="0" [disabled]="isClosed()" /></div>
+                <div class="close-value-row"><label>Maintenance Done by Tenant</label><input type="checkbox" [(ngModel)]="maintenanceDoneByTenant" (ngModelChange)="refreshClosePreview()" [ngModelOptions]="{standalone: true}" [disabled]="isClosed()" /></div>
+                <div class="close-value-row"><label>Accident Penalty Amount</label><input type="number" class="inline-number" [(ngModel)]="accidentPenaltyAmount" (ngModelChange)="refreshClosePreview()" [ngModelOptions]="{standalone: true}" min="0" [disabled]="isClosed()" /></div>
+                <div class="close-value-row"><label>(-) Maintenance Paid by Tenant</label><input type="number" class="inline-number" [(ngModel)]="maintenancePaidByTenant" (ngModelChange)="refreshClosePreview()" [ngModelOptions]="{standalone: true}" min="0" [disabled]="isClosed()" /></div>
+              </div>
+            </fieldset>
+            <fieldset class="section-card close-section totals-section">
+              <legend class="section-legend">Totals</legend>
+              <div class="close-value-list">
+                <div class="close-value-row"><label>Total Rental Amount</label><strong>{{ closeResult()?.totalAmount || 0 }}</strong></div>
+                <div class="close-value-row"><label>Total Driver Amount</label><input type="number" class="inline-number" [(ngModel)]="driverAmount" (ngModelChange)="refreshClosePreview()" [ngModelOptions]="{standalone: true}" min="0" [disabled]="isClosed()" /></div>
+                <div class="close-value-row"><label>Total Due Amount</label><strong>{{ closeResult()?.totalAmount || 0 }}</strong></div>
+                <div class="close-value-row"><label>Discount Amount</label><input type="number" class="inline-number" [(ngModel)]="exitDiscountAmount" (ngModelChange)="refreshClosePreview()" [ngModelOptions]="{standalone: true}" min="0" [disabled]="isClosed()" /></div>
+                <div class="close-value-row total-highlight"><label>Net Due Amount</label><strong>{{ closeResult()?.netDueAmount || 0 }}</strong></div>
+              </div>
+            </fieldset>
+          </div>
         </div>
       }
 
       <!-- Bottom Save Action Bar -->
       <div class="bottom-bar">
         <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        @if (!isExisting()) {
         <button type="button" class="btn btn-primary" (click)="saveContract()" [disabled]="isSubmitting()">
           @if (isSubmitting()) {
             <span>Saving & Activating...</span>
@@ -359,6 +509,11 @@
             <span>Save & Activate Contract</span>
           }
         </button>
+        } @else if (!isClosed()) {
+          <button type="button" class="btn btn-primary" (click)="closeExistingContract()" [disabled]="isSubmitting() || !closeDate || closeKm < (existingContract()?.startKilometerCounter || 0)">
+            {{ isSubmitting() ? 'Saving & Closing...' : 'Save & Close Contract' }}
+          </button>
+        }
       </div>
     </form>
   </div>

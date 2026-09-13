@@ -1,10 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ContractService } from '../../../core/services/contract.service';
 import { StateService } from '../../../core/services/state.service';
-import { ContractType, PaymentType, NotificationType, CreateRentalContractDto } from '../../../core/models/contract.model';
+import { ContractType, PaymentType, NotificationType, CreateRentalContractDto, RentalContractDto, RentalCalculationResult, ContractStatus } from '../../../core/models/contract.model';
 
 @Component({
   selector: 'app-add-contract',
@@ -18,8 +18,23 @@ export class AddContractComponent implements OnInit {
   private contractService = inject(ContractService);
   public state = inject(StateService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
-  activeTab = signal<'tenant' | 'vehicle'>('tenant');
+  activeTab = signal<'tenant' | 'vehicle' | 'close'>('tenant');
+  contractId = signal<number | null>(null);
+  existingContract = signal<RentalContractDto | null>(null);
+  isLoadingContract = signal<boolean>(false);
+  closeResult = signal<RentalCalculationResult | null>(null);
+  closeDate = '';
+  closeKm = 0;
+  maintenancePenaltyAmount = 0;
+  accidentPenaltyAmount = 0;
+  driverAmount = 0;
+  paidAmount = 0;
+  exitDiscountAmount = 0;
+  maintenancePaidByTenant = 0;
+  maintenanceDoneByTenant = false;
+  closeNotes = '';
   isSubmitting = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
@@ -107,6 +122,11 @@ export class AddContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) {
+      this.contractId.set(id);
+      this.loadContract(id);
+    }
   }
 
   initForm(): void {
@@ -159,6 +179,13 @@ export class AddContractComponent implements OnInit {
         idExpireDate: ['']
       }),
 
+      driverTerms: this.fb.group({
+        driverFare: [0],
+        driverWorkingHoursPerDay: [0],
+        driverOvertimeAmountPerHour: [0],
+        dailyRate: [0]
+      }),
+
       vehicle: this.fb.group({
         plateNo: ['', Validators.required],
         modelYear: ['2024'],
@@ -178,6 +205,19 @@ export class AddContractComponent implements OnInit {
         allowedDelayHours: [2],
         maintenancePenalty: [150],
         accidentPenalty: [500]
+      }),
+
+      mileage: this.fb.group({
+        kilometerPerDay: [0, [Validators.min(0)]],
+        maximumKilometerPerDay: [0, [Validators.min(0)]],
+        amountOfKmExceedingLimit: [0, [Validators.min(0)]]
+      }),
+
+      maintenance: this.fb.group({
+        nextMaintenanceDate: [''],
+        nextMaintenanceKm: [null, [Validators.min(0)]],
+        reminderBeforePeriodicMaintenance: [7, [Validators.min(0)]],
+        notificationType: [NotificationType.Kilometer]
       })
     });
 
@@ -277,8 +317,130 @@ export class AddContractComponent implements OnInit {
     return d.toISOString().split('T')[0];
   }
 
-  setTab(tab: 'tenant' | 'vehicle'): void {
+  setTab(tab: 'tenant' | 'vehicle' | 'close'): void {
     this.activeTab.set(tab);
+  }
+
+  isExisting(): boolean {
+    return this.contractId() !== null;
+  }
+
+  isClosed(): boolean {
+    const status = this.existingContract()?.status;
+    return status !== undefined && status !== ContractStatus.Active;
+  }
+
+  loadContract(id: number): void {
+    this.isLoadingContract.set(true);
+    this.contractService.getById(id).subscribe({
+      next: (contract) => {
+        this.existingContract.set(contract);
+        this.form.patchValue({
+          companyId: contract.companyId,
+          branchId: contract.branchId,
+          contractType: contract.contractType,
+          status: contract.statusName,
+          date: contract.startDate.substring(0, 10),
+          time: contract.startTime.substring(0, 5),
+          periodInDays: contract.periodInDays,
+          expectedReceivingDate: contract.expectedReceivingDate.substring(0, 10),
+          expectedReceivingTime: contract.expectedReceivingTime.substring(0, 5),
+          currency: contract.currency,
+          paymentType: contract.paymentType,
+          withDriver: contract.withDriver,
+          driverName: contract.driverName || '',
+          tenant: { tenantName: contract.tenantName, licenseNumber: contract.licenseNumber, idNumber: contract.idNumber, mobile: contract.mobile },
+          driver: { driverName: contract.secondDriverName || '', nationality: contract.secondDriverNationality || 'Saudi', licenseNumber: contract.secondDriverLicenseNumber || '', idNumber: contract.secondDriverIdNumber || '' },
+          vehicle: { plateNo: contract.vehiclePlateNo, modelYear: contract.vehicleModelYear, fileNo: contract.vehicleFileNo, startKilometerCounter: contract.startKilometerCounter },
+          pricing: { rentPrice: contract.rentPrice, discountPercent: contract.discountPercent, discountAmount: contract.discountAmount, netRentPrice: contract.netRentPrice },
+          penalties: { delayPenaltyPerHour: contract.delayPenaltyPerHour, allowedDelayHours: contract.allowedDelayHours, maintenancePenalty: contract.maintenancePenalty, accidentPenalty: contract.accidentPenalty },
+          mileage: { kilometerPerDay: contract.kilometerPerDay, maximumKilometerPerDay: contract.maximumKilometerPerDay, amountOfKmExceedingLimit: contract.amountOfKmExceedingLimit },
+          maintenance: { nextMaintenanceDate: contract.nextMaintenanceDate?.substring(0, 10) || '', nextMaintenanceKm: contract.nextMaintenanceKm ?? null, reminderBeforePeriodicMaintenance: contract.reminderBeforePeriodicMaintenance ?? 7, notificationType: contract.notificationType ?? NotificationType.Kilometer }
+        }, { emitEvent: false });
+        if (contract.actualReturnDate) {
+          this.closeDate = contract.actualReturnDate.substring(0, 16);
+          this.closeKm = contract.returnKilometerCounter || contract.startKilometerCounter;
+          this.maintenancePenaltyAmount = contract.maintenancePenaltyAmount || 0;
+          this.accidentPenaltyAmount = contract.accidentPenaltyAmount || 0;
+          this.driverAmount = contract.driverAmount || 0;
+          this.paidAmount = contract.paidAmount || 0;
+          this.closeNotes = contract.closingNotes || '';
+          this.closeResult.set(this.toCalculationResult(contract));
+        } else {
+          this.closeKm = contract.startKilometerCounter;
+          this.closeDate = this.toDateTimeLocal(new Date());
+          this.refreshClosePreview();
+        }
+        this.isLoadingContract.set(false);
+      },
+      error: (err) => {
+        this.isLoadingContract.set(false);
+        this.errorMessage.set(err?.error?.message || 'Unable to load contract.');
+      }
+    });
+  }
+
+  toDateTimeLocal(date: Date): string {
+    const pad = (value: number) => value.toString().padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  }
+
+  toCalculationResult(contract: RentalContractDto): RentalCalculationResult {
+    return {
+      baseRent: contract.totalAmount || 0, discountAmount: contract.discountAmount, delayPenalty: contract.delayHours || 0,
+      totalAmount: contract.totalAmount || 0, actualPeriodInDays: contract.actualPeriodInDays, delayHours: contract.delayHours || 0,
+      totalConsumptionKilometers: contract.totalConsumptionKilometers || 0, freeKilometers: contract.freeKilometers || 0,
+      exceededKilometers: contract.exceededKilometers || 0, exceededKilometersAmount: contract.exceededKilometersAmount || 0,
+      maintenancePenaltyAmount: contract.maintenancePenaltyAmount || 0, accidentPenaltyAmount: contract.accidentPenaltyAmount || 0,
+      driverAmount: contract.driverAmount || 0, paidAmount: contract.paidAmount || 0, netDueAmount: contract.netDueAmount || 0,
+      exitDiscountAmount: contract.exitDiscountAmount || 0, maintenancePaidByTenant: contract.maintenancePaidByTenant || 0,
+      maintenanceDoneByTenant: contract.maintenanceDoneByTenant || false
+    };
+  }
+
+  closeExistingContract(): void {
+    const id = this.contractId();
+    if (!id || this.isClosed() || !this.closeDate) return;
+    this.isSubmitting.set(true);
+    this.errorMessage.set(null);
+    this.contractService.closeContract(id, {
+      actualReturnDate: new Date(this.closeDate).toISOString(), returnKm: Number(this.closeKm),
+      maintenancePenaltyAmount: Number(this.maintenancePenaltyAmount) || 0,
+      accidentPenaltyAmount: Number(this.accidentPenaltyAmount) || 0,
+      driverAmount: Number(this.driverAmount) || 0, paidAmount: Number(this.paidAmount) || 0,
+      exitDiscountAmount: Number(this.exitDiscountAmount) || 0,
+      maintenancePaidByTenant: Number(this.maintenancePaidByTenant) || 0,
+      maintenanceDoneByTenant: this.maintenanceDoneByTenant,
+      notes: this.closeNotes
+    }).subscribe({
+      next: (result) => { this.closeResult.set(result); this.isSubmitting.set(false); this.loadContract(id); },
+      error: (err) => { this.isSubmitting.set(false); this.errorMessage.set(err?.error?.message || 'Unable to close contract.'); }
+    });
+  }
+
+  refreshClosePreview(): void {
+    const contract = this.existingContract();
+    if (!contract || this.isClosed() || !this.closeDate) return;
+    const actualDate = new Date(this.closeDate);
+    const start = new Date(`${contract.startDate.substring(0, 10)}T${contract.startTime.substring(0, 5)}`);
+    const days = Math.max(1, Math.ceil((actualDate.getTime() - start.getTime()) / 86400000));
+    const periods = contract.contractType === ContractType.Weekly ? Math.ceil(days / 7) : contract.contractType === ContractType.Monthly ? Math.ceil(days / 30) : contract.contractType === ContractType.Hourly ? Math.max(1, Math.ceil((actualDate.getTime() - start.getTime()) / 3600000)) : days;
+    const delayStart = new Date(`${contract.expectedReceivingDate.substring(0, 10)}T${contract.expectedReceivingTime.substring(0, 5)}`);
+    const delayHours = Math.max(0, Math.ceil((actualDate.getTime() - delayStart.getTime()) / 3600000) - Number(contract.allowedDelayHours));
+    const consumption = Math.max(0, Number(this.closeKm) - contract.startKilometerCounter);
+    const free = contract.maximumKilometerPerDay * days;
+    const exceeded = Math.max(0, consumption - free);
+    const delayPenalty = delayHours * contract.delayPenaltyPerHour;
+    const maintenanceAmount = this.maintenanceDoneByTenant ? 0 : Number(this.maintenancePenaltyAmount);
+    const total = periods * contract.rentPrice - periods * contract.discountAmount + delayPenalty + exceeded * contract.amountOfKmExceedingLimit + maintenanceAmount + Number(this.accidentPenaltyAmount) + Number(this.driverAmount) - Number(this.maintenancePaidByTenant);
+    this.closeResult.set({
+      baseRent: periods * contract.rentPrice, discountAmount: periods * contract.discountAmount, delayPenalty, totalAmount: total,
+      actualPeriodInDays: days, delayHours, totalConsumptionKilometers: consumption, freeKilometers: free, exceededKilometers: exceeded,
+      exceededKilometersAmount: exceeded * contract.amountOfKmExceedingLimit, maintenancePenaltyAmount: maintenanceAmount, accidentPenaltyAmount: Number(this.accidentPenaltyAmount),
+      driverAmount: Number(this.driverAmount), paidAmount: Number(this.paidAmount), netDueAmount: Math.max(0, total - Number(this.paidAmount) - Number(this.exitDiscountAmount)),
+      exitDiscountAmount: Number(this.exitDiscountAmount), maintenancePaidByTenant: Number(this.maintenancePaidByTenant),
+      maintenanceDoneByTenant: this.maintenanceDoneByTenant
+    });
   }
 
   saveContract(): void {
@@ -349,6 +511,26 @@ export class AddContractComponent implements OnInit {
         allowedDelayHours: Number(val.penalties.allowedDelayHours),
         maintenancePenalty: Number(val.penalties.maintenancePenalty),
         accidentPenalty: Number(val.penalties.accidentPenalty)
+      },
+
+      driverTerms: val.withDriver ? {
+        driverFare: Number(val.driverTerms.driverFare),
+        driverWorkingHoursPerDay: Number(val.driverTerms.driverWorkingHoursPerDay),
+        driverOvertimeAmountPerHour: Number(val.driverTerms.driverOvertimeAmountPerHour),
+        dailyRate: Number(val.driverTerms.dailyRate)
+      } : undefined,
+
+      mileage: {
+        kilometerPerDay: Number(val.mileage.kilometerPerDay),
+        maximumKilometerPerDay: Number(val.mileage.maximumKilometerPerDay),
+        amountOfKmExceedingLimit: Number(val.mileage.amountOfKmExceedingLimit)
+      },
+
+      maintenance: {
+        nextMaintenanceDate: val.maintenance.nextMaintenanceDate ? new Date(val.maintenance.nextMaintenanceDate).toISOString() : undefined,
+        nextMaintenanceKm: val.maintenance.nextMaintenanceKm === null || val.maintenance.nextMaintenanceKm === '' ? undefined : Number(val.maintenance.nextMaintenanceKm),
+        reminderBeforePeriodicMaintenance: Number(val.maintenance.reminderBeforePeriodicMaintenance),
+        notificationType: Number(val.maintenance.notificationType)
       }
     };
 

@@ -14,19 +14,12 @@ public class DailyRentalStrategy : IRentalCalculationStrategy
         var baseRent = totalDays * contract.Pricing.RentPrice;
         var discount = totalDays * contract.Pricing.DiscountAmount;
 
-        decimal delayPenalty = 0;
         var expectedReturn = contract.Period.ExpectedReceivingDate.Add(contract.Period.ExpectedReceivingTime);
-        if (actualReturnDate > expectedReturn)
-        {
-            var delayHours = (actualReturnDate - expectedReturn).TotalHours;
-            if (delayHours > (double)contract.Penalties.AllowedDelayHours)
-            {
-                delayPenalty = (decimal)Math.Ceiling(delayHours) * contract.Penalties.DelayPenaltyPerHour;
-            }
-        }
+        var delayPenalty = RentalPenaltyCalculator.CalculateDelayPenalty(
+            expectedReturn, actualReturnDate, contract.Penalties);
 
         var totalAmount = (baseRent - discount) + delayPenalty;
 
-        return new RentalCalculationResult(baseRent, discount, delayPenalty, totalAmount);
+        return new RentalCalculationResult(baseRent, discount, delayPenalty, totalAmount, totalDays);
     }
 }

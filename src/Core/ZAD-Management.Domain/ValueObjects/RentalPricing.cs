@@ -14,6 +14,12 @@ public class RentalPricing
         if (rentPrice < 0)
             throw new ArgumentException("Rent price cannot be negative.");
 
+        if (discountPercent < 0 || discountPercent > 100)
+            throw new ArgumentOutOfRangeException(nameof(discountPercent), "Discount percent must be between 0 and 100.");
+
+        if (discountAmount < 0)
+            throw new ArgumentOutOfRangeException(nameof(discountAmount), "Discount amount cannot be negative.");
+
         RentPrice = rentPrice;
 
         if (discountPercent > 0)

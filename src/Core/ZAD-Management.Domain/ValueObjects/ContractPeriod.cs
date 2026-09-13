@@ -17,8 +17,8 @@ public class ContractPeriod
         TimeSpan expectedReceivingTime,
         int? periodInDays = null)
     {
-        if (expectedReceivingDate.Date < startDate.Date)
-            throw new ArgumentException("Expected receiving date cannot be earlier than start date.");
+        if (expectedReceivingDate.Date.Add(expectedReceivingTime) < startDate.Date.Add(startTime))
+            throw new ArgumentException("Expected receiving time cannot be earlier than the start time.");
 
         StartDate = startDate.Date;
         StartTime = startTime;

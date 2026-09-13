@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ZAD_Management.Domain.Entities;
+using DomainRentalContract = ZAD_Management.Domain.Entities.RentalContract;
 
 namespace ZAD_Management.Infrastructure.Persistence.Configurations;
 
-public class RentalContractConfiguration : IEntityTypeConfiguration<RentalContract>
+public class RentalContractConfiguration : IEntityTypeConfiguration<DomainRentalContract>
 {
-    public void Configure(EntityTypeBuilder<RentalContract> builder)
+    public void Configure(EntityTypeBuilder<DomainRentalContract> builder)
     {
         builder.ToTable("RentalContracts");
 
@@ -16,30 +16,8 @@ public class RentalContractConfiguration : IEntityTypeConfiguration<RentalContra
             .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(x => x.FinalBaseRent)
-            .HasPrecision(18, 2);
-
-        builder.Property(x => x.FinalDiscount)
-            .HasPrecision(18, 2);
-
-        builder.Property(x => x.FinalDelayPenalty)
-            .HasPrecision(18, 2);
-
-        builder.Property(x => x.FinalTotalAmount)
-            .HasPrecision(18, 2);
-
-        builder.Property(x => x.ActualReturnKm)
-            .HasPrecision(18, 2);
-
-        builder.HasOne(x => x.Company)
-            .WithMany()
-            .HasForeignKey(x => x.CompanyId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(x => x.Branch)
-            .WithMany()
-            .HasForeignKey(x => x.BranchId)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(x => x.CompanyId).IsRequired();
+        builder.Property(x => x.BranchId).IsRequired();
 
         builder.OwnsOne(x => x.Period, period =>
         {
@@ -72,7 +50,12 @@ public class RentalContractConfiguration : IEntityTypeConfiguration<RentalContra
         {
             vehicle.Property(v => v.PlateNo).HasColumnName("VehiclePlateNo").HasMaxLength(50).IsRequired();
             vehicle.Property(v => v.ModelYear).HasColumnName("VehicleModelYear").HasMaxLength(10);
+            vehicle.Property(v => v.FileNo).HasColumnName("VehicleFileNo").HasMaxLength(50);
             vehicle.Property(v => v.KilometerCounter).HasColumnName("StartKilometerCounter").HasPrecision(18, 2);
+            vehicle.Property(v => v.KilometerPerDay).HasColumnName("KilometerPerDay").HasPrecision(18, 2);
+            vehicle.Property(v => v.MaximumKilometerPerDay).HasColumnName("MaximumKilometerPerDay").HasPrecision(18, 2);
+            vehicle.Property(v => v.NextMaintenanceDate).HasColumnName("NextMaintenanceDate");
+            vehicle.Property(v => v.NextMaintenanceKm).HasColumnName("NextMaintenanceKm").HasPrecision(18, 2);
         });
 
         builder.OwnsOne(x => x.Pricing, pricing =>
@@ -89,6 +72,8 @@ public class RentalContractConfiguration : IEntityTypeConfiguration<RentalContra
             penalties.Property(p => p.AllowedDelayHours).HasColumnName("AllowedDelayHours").HasPrecision(5, 2);
             penalties.Property(p => p.MaintenancePenalty).HasColumnName("MaintenancePenalty").HasPrecision(18, 2);
             penalties.Property(p => p.AccidentPenalty).HasColumnName("AccidentPenalty").HasPrecision(18, 2);
+            penalties.Property(p => p.AmountOfKmExceedingTheLimit).HasColumnName("AmountOfKmExceedingTheLimit").HasPrecision(18, 2);
         });
+
     }
 }

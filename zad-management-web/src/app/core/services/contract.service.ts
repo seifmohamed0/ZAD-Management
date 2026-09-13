@@ -27,7 +27,18 @@ export class ContractService {
     return this.http.post<{ id: number; message: string }>(this.apiUrl, dto);
   }
 
-  closeContract(id: number, data: { actualReturnDate: string; returnKm: number }): Observable<RentalCalculationResult> {
+  closeContract(id: number, data: {
+    actualReturnDate: string;
+    returnKm: number;
+    maintenancePenaltyAmount?: number;
+    accidentPenaltyAmount?: number;
+    driverAmount?: number;
+    paidAmount?: number;
+    exitDiscountAmount?: number;
+    maintenancePaidByTenant?: number;
+    maintenanceDoneByTenant?: boolean;
+    notes?: string;
+  }): Observable<RentalCalculationResult> {
     return this.http.post<RentalCalculationResult>(`${this.apiUrl}/${id}/close`, data);
   }
 }

@@ -23,9 +23,9 @@ public class GetRentalContractByIdHandler : IRequestHandler<GetRentalContractByI
         {
             Id = contract.Id,
             CompanyId = contract.CompanyId,
-            CompanyName = contract.Company?.EnglishName,
+            CompanyName = null,
             BranchId = contract.BranchId,
-            BranchName = contract.Branch?.EnglishName,
+            BranchName = null,
             ContractNumber = contract.ContractNumber,
             AccountingNo = null,
             ReferenceNo = null,
@@ -77,9 +77,9 @@ public class GetRentalContractByIdHandler : IRequestHandler<GetRentalContractByI
             // Vehicle
             VehiclePlateNo = contract.Vehicle.PlateNo,
             VehicleModelYear = contract.Vehicle.ModelYear,
-            VehicleFileNo = string.Empty,
+            VehicleFileNo = contract.Vehicle.FileNo,
             StartKilometerCounter = contract.Vehicle.KilometerCounter,
-            ReturnKilometerCounter = contract.ActualReturnKm,
+            ReturnKilometerCounter = null,
 
             // Pricing
             RentPrice = contract.Pricing.RentPrice,
@@ -100,13 +100,13 @@ public class GetRentalContractByIdHandler : IRequestHandler<GetRentalContractByI
             DriverDailyRate = null,
 
             // Mileage
-            KilometerPerDay = 0,
-            MaximumKilometerPerDay = 0,
-            AmountOfKmExceedingLimit = 0,
+            KilometerPerDay = contract.Vehicle.KilometerPerDay,
+            MaximumKilometerPerDay = contract.Vehicle.MaximumKilometerPerDay,
+                AmountOfKmExceedingLimit = contract.Penalties.AmountOfKmExceedingTheLimit,
 
             // Maintenance
-            NextMaintenanceDate = null,
-            NextMaintenanceKm = null,
+            NextMaintenanceDate = contract.Vehicle.NextMaintenanceDate,
+            NextMaintenanceKm = contract.Vehicle.NextMaintenanceKm,
             ReminderBeforePeriodicMaintenance = null,
             NotificationType = null
         };

@@ -13,6 +13,7 @@ public class RentalCalculationStrategyFactory
             ContractType.Daily => new DailyRentalStrategy(),
             ContractType.Weekly => new WeeklyRentalStrategy(),
             ContractType.Monthly => new MonthlyRentalStrategy(),
+            ContractType.Yearly => new YearlyRentalStrategy(),
             _ => throw new NotSupportedException($"Rental calculation for contract type {contractType} is not supported.")
         };
     }

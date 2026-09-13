@@ -4,5 +4,6 @@ public enum ContractStatus
 {
     Active = 1,
     Closed = 2,
+    Received = 3,
 }
 

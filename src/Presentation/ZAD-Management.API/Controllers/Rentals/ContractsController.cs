@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ZAD_Management.Application.Features.Rentals.Contracts.Commands.CloseRentalContract;
 using ZAD_Management.Application.Features.Rentals.Contracts.Commands.CreateRentalContract;
+using ZAD_Management.Application.Features.Rentals.Contracts.Commands.ReceiveVehicle;
 using ZAD_Management.Application.Features.Rentals.Contracts.DTOs;
 using ZAD_Management.Application.Features.Rentals.Contracts.Queries.GetAllRentalContracts;
 using ZAD_Management.Application.Features.Rentals.Contracts.Queries.GetRentalContractById;
@@ -46,8 +47,33 @@ public class ContractsController : ControllerBase
     [HttpPost("{id:int}/close")]
     public async Task<IActionResult> Close(int id, [FromBody] CloseRentalContractDto dto)
     {
-        var result = await _mediator.Send(new CloseRentalContractCommand(id, dto.ActualReturnDate, dto.ReturnKm));
+        var result = await _mediator.Send(new CloseRentalContractCommand(
+            id,
+            dto.ActualReturnDate,
+            dto.ReturnKm,
+            dto.MaintenancePenaltyAmount,
+            dto.AccidentPenaltyAmount,
+            dto.DriverAmount,
+            dto.PaidAmount,
+            dto.Notes,
+            dto.ExitDiscountAmount,
+            dto.MaintenancePaidByTenant,
+            dto.MaintenanceDoneByTenant));
         return Ok(result);
     }
+
+    [HttpPost("{id:int}/receiving")]
+    public async Task<IActionResult> Receive(int id, [FromBody] ReceiveVehicleDto dto)
+    {
+        var result = await _mediator.Send(new ReceiveVehicleCommand(
+            id,
+            dto.ReceivingDate,
+            dto.ReceivingKilometerCounter,
+            dto.MaintenanceDoneByTenant,
+            dto.Notes));
+
+        return Ok(result);
+    }
+
 }
 

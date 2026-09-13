@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ZAD-Management.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+403810149228a677640b0c05d86dcdce8fac209b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ef1b6bcf07ed631cb11e02828ba1b65384107c0")]
 [assembly: System.Reflection.AssemblyProductAttribute("ZAD-Management.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ZAD-Management.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

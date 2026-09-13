@@ -2,10 +2,10 @@ C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\
 C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-Management.Infrastructure.runtimeconfig.json
 C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-Management.Infrastructure.dll
 C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-Management.Infrastructure.pdb
-C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-management.Application.dll
-C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-management.Domain.dll
-C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-management.Application.pdb
-C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-management.Domain.pdb
+C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-Management.Application.dll
+C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-Management.Domain.dll
+C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-Management.Application.pdb
+C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\bin\Debug\net8.0\ZAD-Management.Domain.pdb
 C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\obj\Debug\net8.0\ZAD-Management.Infrastructure.csproj.AssemblyReference.cache
 C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\obj\Debug\net8.0\ZAD-Management.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
 C:\Projects\ZAD-Management\src\Infrastructure\ZAD-Management.Infrastructure\obj\Debug\net8.0\ZAD-Management.Infrastructure.AssemblyInfoInputs.cache

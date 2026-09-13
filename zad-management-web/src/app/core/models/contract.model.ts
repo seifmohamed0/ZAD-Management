@@ -1,13 +1,15 @@
 export enum ContractStatus {
   Active = 1,
-  Closed = 2
+  Closed = 2,
+  Received = 3
 }
 
 export enum ContractType {
   Hourly = 1,
   Daily = 2,
   Weekly = 3,
-  Monthly = 4
+  Monthly = 4,
+  Yearly = 5
 }
 
 export interface RentalCalculationResult {
@@ -15,6 +17,20 @@ export interface RentalCalculationResult {
   discountAmount: number;
   delayPenalty: number;
   totalAmount: number;
+  actualPeriodInDays: number;
+  delayHours: number;
+  totalConsumptionKilometers: number;
+  freeKilometers: number;
+  exceededKilometers: number;
+  exceededKilometersAmount: number;
+  maintenancePenaltyAmount: number;
+  accidentPenaltyAmount: number;
+  driverAmount: number;
+  paidAmount: number;
+  netDueAmount: number;
+  exitDiscountAmount: number;
+  maintenancePaidByTenant: number;
+  maintenanceDoneByTenant: boolean;
 }
 
 export enum PaymentType {
@@ -142,6 +158,23 @@ export interface RentalContractDto {
   nextMaintenanceKm?: number;
   reminderBeforePeriodicMaintenance?: number;
   notificationType?: NotificationType;
+
+  actualReturnDate?: string;
+  closingNotes?: string;
+  delayHours?: number;
+  totalConsumptionKilometers?: number;
+  freeKilometers?: number;
+  exceededKilometers?: number;
+  exceededKilometersAmount?: number;
+  maintenancePenaltyAmount?: number;
+  accidentPenaltyAmount?: number;
+  driverAmount?: number;
+  paidAmount?: number;
+  exitDiscountAmount?: number;
+  maintenancePaidByTenant?: number;
+  maintenanceDoneByTenant?: boolean;
+  totalAmount?: number;
+  netDueAmount?: number;
 }
 
 export interface CreateRentalContractDto {
@@ -230,4 +263,3 @@ export interface CreateRentalContractDto {
     notificationType?: NotificationType;
   };
 }
-

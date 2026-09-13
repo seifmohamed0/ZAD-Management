@@ -6,4 +6,3 @@ public enum NotificationType
     Date = 2,
     Both = 3
 }
-

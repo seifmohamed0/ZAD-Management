@@ -27,6 +27,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/rentals/contracts/add-contract.component').then(m => m.AddContractComponent)
   },
   {
+    path: 'rentals/contracts/:id/close',
+    loadComponent: () => import('./features/rentals/contracts/add-contract.component').then(m => m.AddContractComponent)
+  },
+  {
     path: '**',
     redirectTo: 'home'
   }

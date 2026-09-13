@@ -160,11 +160,13 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("ActualReceivingDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("ActualReturnDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("ActualReturnKm")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("BranchId")
@@ -185,23 +187,46 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("FinalBaseRent")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("FinalDelayPenalty")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("FinalDiscount")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("FinalTotalAmount")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<bool?>("MaintenanceDoneByTenant")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("ReceivingDelayHours")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("ReceivingExceededKilometers")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("ReceivingExceededKilometersAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("ReceivingFreeKilometers")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("ReceivingKilometerCounter")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ReceivingNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("ReceivingPeriodInDays")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("ReceivingTotalConsumptionKilometers")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -237,13 +262,13 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                     b.HasOne("ZAD_Management.Domain.Entities.Branch", "Branch")
                         .WithMany()
                         .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ZAD_Management.Domain.Entities.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.OwnsOne("ZAD_Management.Domain.ValueObjects.ContractPeriod", "Period", b1 =>
@@ -335,6 +360,11 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                                 .HasColumnType("decimal(5,2)")
                                 .HasColumnName("AllowedDelayHours");
 
+                            b1.Property<decimal>("AmountOfKmExceedingTheLimit")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("AmountOfKmExceedingTheLimit");
+
                             b1.Property<decimal>("DelayPenaltyPerHour")
                                 .HasPrecision(18, 2)
                                 .HasColumnType("decimal(18,2)")
@@ -391,16 +421,41 @@ namespace ZAD_Management.Infrastructure.Persistence.Migrations
                             b1.Property<int>("RentalContractId")
                                 .HasColumnType("int");
 
+                            b1.Property<string>("FileNo")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("VehicleFileNo");
+
                             b1.Property<decimal>("KilometerCounter")
                                 .HasPrecision(18, 2)
                                 .HasColumnType("decimal(18,2)")
                                 .HasColumnName("StartKilometerCounter");
+
+                            b1.Property<decimal>("KilometerPerDay")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("KilometerPerDay");
+
+                            b1.Property<decimal>("MaximumKilometerPerDay")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("MaximumKilometerPerDay");
 
                             b1.Property<string>("ModelYear")
                                 .IsRequired()
                                 .HasMaxLength(10)
                                 .HasColumnType("nvarchar(10)")
                                 .HasColumnName("VehicleModelYear");
+
+                            b1.Property<DateTime?>("NextMaintenanceDate")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("NextMaintenanceDate");
+
+                            b1.Property<decimal?>("NextMaintenanceKm")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("NextMaintenanceKm");
 
                             b1.Property<string>("PlateNo")
                                 .IsRequired()

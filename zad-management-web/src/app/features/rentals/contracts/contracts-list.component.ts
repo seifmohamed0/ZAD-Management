@@ -86,16 +86,7 @@ export class ContractsListComponent implements OnInit {
   }
 
   openCloseModal(contract: RentalContractListDto): void {
-    this.selectedContractForClose.set(contract);
-    this.closeError.set(null);
-    this.calculationResult.set(null);
-
-    const now = new Date();
-    const pad = (n: number) => (n < 10 ? '0' + n : n);
-    const formatted = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
-    this.actualReturnDate.set(formatted);
-    this.returnKm.set(0);
-    this.isCloseModalOpen.set(true);
+    this.router.navigate(['/rentals/contracts', contract.id, 'close']);
   }
 
   closeModal(): void {

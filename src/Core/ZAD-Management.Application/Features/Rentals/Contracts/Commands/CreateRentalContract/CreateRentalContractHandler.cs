@@ -87,7 +87,12 @@ public class CreateRentalContractHandler
         var vehicle = new RentedVehicleSnapshot(
             dto.Vehicle.PlateNo,
             dto.Vehicle.ModelYear,
-            dto.Vehicle.StartKilometerCounter
+            dto.Vehicle.StartKilometerCounter,
+            dto.Mileage.KilometerPerDay,
+            dto.Mileage.MaximumKilometerPerDay,
+            dto.Maintenance?.NextMaintenanceDate,
+            dto.Maintenance?.NextMaintenanceKm,
+            dto.Vehicle.FileNo
         );
 
         // Create Rental Pricing
@@ -102,7 +107,8 @@ public class CreateRentalContractHandler
             dto.Penalties.DelayPenaltyPerHour,
             dto.Penalties.AllowedDelayHours,
             dto.Penalties.MaintenancePenalty,
-            dto.Penalties.AccidentPenalty
+            dto.Penalties.AccidentPenalty,
+            dto.Mileage.AmountOfKmExceedingLimit
         );
 
         // Create Rental Contract via Domain Factory
