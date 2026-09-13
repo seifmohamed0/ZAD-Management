@@ -66,7 +66,7 @@ public class RentalContract
         BranchId = branchId;
         ContractNumber = contractNumber;
         ContractType = contractType;
-        WithDriver = withDriver;
+        WithDriver = driver is not null;
         Status = ContractStatus.Active;
 
         Period = period ?? throw new ArgumentNullException(nameof(period));
@@ -96,6 +96,21 @@ public class RentalContract
         FinalTotalAmount = calcResult.TotalAmount;
         Status = ContractStatus.Closed;
         UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdatePricing(RentalPricing pricing)
+    {
+        Pricing = pricing ?? throw new ArgumentNullException(nameof(pricing));
+    }
+
+    public void UpdateMileagePolicy(decimal kilometerPerDay, decimal maximumKilometerPerDay)
+    {
+        Vehicle.UpdateMileagePolicy(kilometerPerDay, maximumKilometerPerDay);
+    }
+
+    public void UpdatePenaltyPolicy(PenaltyPolicy penalties)
+    {
+        Penalties = penalties ?? throw new ArgumentNullException(nameof(penalties));
     }
 
     public void ReceiveVehicle(

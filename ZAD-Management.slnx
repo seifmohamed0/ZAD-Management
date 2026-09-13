@@ -13,5 +13,8 @@
   <Folder Name="/src/Presentation/">
     <Project Path="src/Presentation/ZAD-Management.API/ZAD-Management.API.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ZAD-Management.Domain.Tests/ZAD-Management.Domain.Tests.csproj" />
+  </Folder>
   <Project Path="../../Temp/InspectDomain/InspectDomain.csproj" />
 </Solution>

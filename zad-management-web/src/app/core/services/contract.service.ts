@@ -38,6 +38,23 @@ export class ContractService {
     maintenancePaidByTenant?: number;
     maintenanceDoneByTenant?: boolean;
     notes?: string;
+    pricing?: {
+      rentPrice: number;
+      discountPercent: number;
+      discountAmount: number;
+    };
+    mileage?: {
+      kilometerPerDay: number;
+      maximumKilometerPerDay: number;
+      amountOfKmExceedingLimit: number;
+    };
+    penalties?: {
+      delayPenaltyPerHour: number;
+      allowedDelayHours: number;
+      maintenancePenalty: number;
+      accidentPenalty: number;
+      amountOfKmExceedingLimit: number;
+    };
   }): Observable<RentalCalculationResult> {
     return this.http.post<RentalCalculationResult>(`${this.apiUrl}/${id}/close`, data);
   }

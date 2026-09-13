@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using ZAD_Management.Application.Common.Behaviors;
 using ZAD_Management.Domain.Factories;
+using ZAD_Management.Domain.Services.Calculations;
 
 namespace ZAD_Management.Application.DependencyInjection;
 
@@ -18,6 +19,7 @@ public static class DependencyInjection
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         services.AddScoped<IRentalContractFactory, RentalContractFactory>();
+        services.AddScoped<RentalSettlementCalculator>();
 
         return services;
     }

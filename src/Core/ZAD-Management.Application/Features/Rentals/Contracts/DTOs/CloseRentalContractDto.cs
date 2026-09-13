@@ -14,5 +14,8 @@ public class CloseRentalContractDto
     public decimal MaintenancePaidByTenant { get; set; }
     public bool MaintenanceDoneByTenant { get; set; }
     public string? Notes { get; set; }
+    public PricingDto? Pricing { get; set; }
+    public MileagePolicyDto? Mileage { get; set; }
+    public PenaltiesDto? Penalties { get; set; }
 }
 

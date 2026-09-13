@@ -58,7 +58,10 @@ public class ContractsController : ControllerBase
             dto.Notes,
             dto.ExitDiscountAmount,
             dto.MaintenancePaidByTenant,
-            dto.MaintenanceDoneByTenant));
+            dto.MaintenanceDoneByTenant,
+            dto.Pricing,
+            dto.Mileage,
+            dto.Penalties));
         return Ok(result);
     }
 

@@ -231,6 +231,8 @@ export class AddContractComponent implements OnInit {
     this.form.get('pricing.rentPrice')?.valueChanges.subscribe(() => this.recalculatePricing(true));
     this.form.get('pricing.discountPercent')?.valueChanges.subscribe(() => this.recalculatePricing(true));
     this.form.get('pricing.discountAmount')?.valueChanges.subscribe(() => this.recalculatePricing(false));
+    this.form.get('mileage')?.valueChanges.subscribe(() => this.refreshClosePreview());
+    this.form.get('penalties')?.valueChanges.subscribe(() => this.refreshClosePreview());
   }
 
   updateDateCalculations(): void {
@@ -257,12 +259,14 @@ export class AddContractComponent implements OnInit {
       this.form.get('pricing.discountAmount')?.setValue(discAmount, { emitEvent: false });
       const net = Math.max(0, rentPrice - discAmount);
       this.form.get('pricing.netRentPrice')?.setValue(net);
+      this.refreshClosePreview();
     } else {
       const discAmount = parseFloat(this.form.get('pricing.discountAmount')?.value) || 0;
       const discPercent = rentPrice > 0 ? Math.round(((discAmount / rentPrice) * 100) * 100) / 100 : 0;
       this.form.get('pricing.discountPercent')?.setValue(discPercent, { emitEvent: false });
       const net = Math.max(0, rentPrice - discAmount);
       this.form.get('pricing.netRentPrice')?.setValue(net);
+      this.refreshClosePreview();
     }
   }
 
@@ -403,6 +407,7 @@ export class AddContractComponent implements OnInit {
     if (!id || this.isClosed() || !this.closeDate) return;
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
+    const val = this.form.getRawValue();
     this.contractService.closeContract(id, {
       actualReturnDate: new Date(this.closeDate).toISOString(), returnKm: Number(this.closeKm),
       maintenancePenaltyAmount: Number(this.maintenancePenaltyAmount) || 0,
@@ -411,7 +416,24 @@ export class AddContractComponent implements OnInit {
       exitDiscountAmount: Number(this.exitDiscountAmount) || 0,
       maintenancePaidByTenant: Number(this.maintenancePaidByTenant) || 0,
       maintenanceDoneByTenant: this.maintenanceDoneByTenant,
-      notes: this.closeNotes
+      notes: this.closeNotes,
+      pricing: {
+        rentPrice: Number(val.pricing.rentPrice) || 0,
+        discountPercent: Number(val.pricing.discountPercent) || 0,
+        discountAmount: Number(val.pricing.discountAmount) || 0
+      },
+      mileage: {
+        kilometerPerDay: Number(val.mileage.kilometerPerDay) || 0,
+        maximumKilometerPerDay: Number(val.mileage.maximumKilometerPerDay) || 0,
+        amountOfKmExceedingLimit: Number(val.mileage.amountOfKmExceedingLimit) || 0
+      },
+      penalties: {
+        delayPenaltyPerHour: Number(val.penalties.delayPenaltyPerHour) || 0,
+        allowedDelayHours: Number(val.penalties.allowedDelayHours) || 0,
+        maintenancePenalty: Number(val.penalties.maintenancePenalty) || 0,
+        accidentPenalty: Number(val.penalties.accidentPenalty) || 0,
+        amountOfKmExceedingLimit: Number(val.mileage.amountOfKmExceedingLimit) || 0
+      }
     }).subscribe({
       next: (result) => { this.closeResult.set(result); this.isSubmitting.set(false); this.loadContract(id); },
       error: (err) => { this.isSubmitting.set(false); this.errorMessage.set(err?.error?.message || 'Unable to close contract.'); }
@@ -421,6 +443,14 @@ export class AddContractComponent implements OnInit {
   refreshClosePreview(): void {
     const contract = this.existingContract();
     if (!contract || this.isClosed() || !this.closeDate) return;
+    const val = this.form.getRawValue();
+    const rentPrice = val.pricing?.rentPrice === null || val.pricing?.rentPrice === undefined || val.pricing?.rentPrice === ''
+      ? contract.rentPrice
+      : Number(val.pricing.rentPrice);
+    const discountAmount = Number(val.pricing?.discountAmount) || 0;
+    const maximumKilometerPerDay = Number(val.mileage?.maximumKilometerPerDay) || 0;
+    const amountOfKmExceedingLimit = Number(val.mileage?.amountOfKmExceedingLimit) || 0;
+    const delayPenaltyPerHour = Number(val.penalties?.delayPenaltyPerHour) || 0;
     const actualDate = new Date(this.closeDate);
     const start = new Date(`${contract.startDate.substring(0, 10)}T${contract.startTime.substring(0, 5)}`);
     const days = Math.max(1, Math.ceil((actualDate.getTime() - start.getTime()) / 86400000));
@@ -428,15 +458,15 @@ export class AddContractComponent implements OnInit {
     const delayStart = new Date(`${contract.expectedReceivingDate.substring(0, 10)}T${contract.expectedReceivingTime.substring(0, 5)}`);
     const delayHours = Math.max(0, Math.ceil((actualDate.getTime() - delayStart.getTime()) / 3600000) - Number(contract.allowedDelayHours));
     const consumption = Math.max(0, Number(this.closeKm) - contract.startKilometerCounter);
-    const free = contract.maximumKilometerPerDay * days;
+    const free = maximumKilometerPerDay * days;
     const exceeded = Math.max(0, consumption - free);
-    const delayPenalty = delayHours * contract.delayPenaltyPerHour;
+    const delayPenalty = delayHours * delayPenaltyPerHour;
     const maintenanceAmount = this.maintenanceDoneByTenant ? 0 : Number(this.maintenancePenaltyAmount);
-    const total = periods * contract.rentPrice - periods * contract.discountAmount + delayPenalty + exceeded * contract.amountOfKmExceedingLimit + maintenanceAmount + Number(this.accidentPenaltyAmount) + Number(this.driverAmount) - Number(this.maintenancePaidByTenant);
+    const total = periods * rentPrice - periods * discountAmount + delayPenalty + exceeded * amountOfKmExceedingLimit + maintenanceAmount + Number(this.accidentPenaltyAmount) + Number(this.driverAmount) - Number(this.maintenancePaidByTenant);
     this.closeResult.set({
-      baseRent: periods * contract.rentPrice, discountAmount: periods * contract.discountAmount, delayPenalty, totalAmount: total,
+      baseRent: periods * rentPrice, discountAmount: periods * discountAmount, delayPenalty, totalAmount: total,
       actualPeriodInDays: days, delayHours, totalConsumptionKilometers: consumption, freeKilometers: free, exceededKilometers: exceeded,
-      exceededKilometersAmount: exceeded * contract.amountOfKmExceedingLimit, maintenancePenaltyAmount: maintenanceAmount, accidentPenaltyAmount: Number(this.accidentPenaltyAmount),
+      exceededKilometersAmount: exceeded * amountOfKmExceedingLimit, maintenancePenaltyAmount: maintenanceAmount, accidentPenaltyAmount: Number(this.accidentPenaltyAmount),
       driverAmount: Number(this.driverAmount), paidAmount: Number(this.paidAmount), netDueAmount: Math.max(0, total - Number(this.paidAmount) - Number(this.exitDiscountAmount)),
       exitDiscountAmount: Number(this.exitDiscountAmount), maintenancePaidByTenant: Number(this.maintenancePaidByTenant),
       maintenanceDoneByTenant: this.maintenanceDoneByTenant
@@ -455,6 +485,10 @@ export class AddContractComponent implements OnInit {
 
     this.isSubmitting.set(true);
     const val = this.form.getRawValue();
+    const driverName = (val.driver?.driverName || '').trim();
+    const driverLicense = (val.driver?.licenseNumber || '').trim();
+    const driverId = (val.driver?.idNumber || '').trim();
+    const hasDriverInfo = !!(driverName || driverLicense || driverId);
 
     const dto: CreateRentalContractDto = {
       companyId: Number(val.companyId) || this.state.selectedCompanyId() || 1,
@@ -464,8 +498,8 @@ export class AddContractComponent implements OnInit {
       currency: val.currency || 'SAR',
       contractType: Number(val.contractType),
       paymentType: Number(val.paymentType),
-      withDriver: val.withDriver === true || val.withDriver === 'true',
-      driverName: val.driver?.driverName || val.driverName,
+      withDriver: hasDriverInfo,
+      driverName: driverName || val.driverName,
       notes: val.notes,
 
       startDate: new Date(`${val.date}T${val.time}:00Z`).toISOString(),
@@ -484,7 +518,7 @@ export class AddContractComponent implements OnInit {
         tenantBirthday: val.tenant.tenantBirthday ? new Date(val.tenant.tenantBirthday).toISOString() : undefined
       },
 
-      secondDriver: val.driver?.driverName ? {
+      secondDriver: hasDriverInfo ? {
         secondDriverName: val.driver.driverName,
         nationality: val.driver.nationality,
         licenseNumber: val.driver.licenseNumber,
@@ -513,7 +547,7 @@ export class AddContractComponent implements OnInit {
         accidentPenalty: Number(val.penalties.accidentPenalty)
       },
 
-      driverTerms: val.withDriver ? {
+      driverTerms: hasDriverInfo ? {
         driverFare: Number(val.driverTerms.driverFare),
         driverWorkingHoursPerDay: Number(val.driverTerms.driverWorkingHoursPerDay),
         driverOvertimeAmountPerHour: Number(val.driverTerms.driverOvertimeAmountPerHour),

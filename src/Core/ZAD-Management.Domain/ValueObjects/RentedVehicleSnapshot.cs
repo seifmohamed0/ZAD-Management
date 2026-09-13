@@ -48,4 +48,13 @@ public class RentedVehicleSnapshot
         NextMaintenanceDate = nextMaintenanceDate;
         NextMaintenanceKm = nextMaintenanceKm;
     }
+
+    public void UpdateMileagePolicy(decimal kilometerPerDay, decimal maximumKilometerPerDay)
+    {
+        if (kilometerPerDay < 0 || maximumKilometerPerDay < 0)
+            throw new ArgumentOutOfRangeException(nameof(kilometerPerDay), "Vehicle mileage limits cannot be negative.");
+
+        KilometerPerDay = kilometerPerDay;
+        MaximumKilometerPerDay = maximumKilometerPerDay;
+    }
 }
